@@ -1,4 +1,4 @@
-package com.example.contact
+package com.example.contact.model
 
 import android.graphics.Bitmap
 
