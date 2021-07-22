@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    app:cardCornerRadius="20dp"
+    android:contextClickable="true"
+    android:layout_height="wrap_content"
+    app:cardUseCompatPadding="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+    <com.google.android.material.imageview.ShapeableImageView
+        android:layout_width="65dp"
+        android:id="@+id/profileimage"
+        android:layout_height="65dp"
+        android:padding="4dp"
+        app:shapeAppearanceOverlay="@style/circle"
+        android:src="@drawable/ic_action_person"/>
+    <LinearLayout
+        android:layout_toRightOf="@+id/profileimage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+       android:orientation="vertical">
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:id="@+id/profilename"
+            android:layout_width="match_parent"
+            android:gravity="left"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:gravity="left"
+            android:layout_marginTop="5dp"
+            android:id="@+id/profilenumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+    </LinearLayout>
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>
