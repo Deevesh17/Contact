@@ -6,17 +6,28 @@
     android:layout_height="match_parent"
     android:background="#001CB68A"
     tools:context=".MainActivity">
-    <include
-        layout="@layout/activity_actionbar"
-        android:id="@+id/actionbar"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:id="@+id/actionbar"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBarmain"
+            style="@style/Widget.MaterialComponents.Toolbar.Surface"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#6FEFE3"
+            app:menu="@menu/menudata"
+            app:navigationIcon="@drawable/ic_action_goback"
+            app:title="Contact"
+            app:titleCentered="true" />
+
+    </com.google.android.material.appbar.AppBarLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:id="@+id/listview"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_below="@+id/actionbar"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_height="match_parent"/>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"

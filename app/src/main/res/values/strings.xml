@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Contact</string>
+    <string-array name="group">
+        <item>Friend</item>
+        <item>Family</item>
+        <item>College</item>
+    </string-array>
 </resources>

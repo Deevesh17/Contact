@@ -1,41 +1,52 @@
-package com.example.contact
+ package com.example.contact
 
 import android.Manifest
+import android.app.ProgressDialog
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.contact.model.ContactData
+import com.example.contact.model.ImportData
 import com.example.contact.viewmodel.ContactViewModel
 import kotlinx.android.synthetic.main.activity_actionbar.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    lateinit var contactViewModel : ContactViewModel
+    var contactViewModel : ContactViewModel = ContactViewModel(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        topAppBar.setNavigationOnClickListener {
+        topAppBarmain.setNavigationOnClickListener {
             onBackPressed()
         }
-        topAppBar.setOnMenuItemClickListener {
+        topAppBarmain.setOnMenuItemClickListener {
             onOptionsItemSelected(it)
         }
-        contactViewModel = ContactViewModel(this)
-        if(ActivityCompat.checkSelfPermission(this,Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED){
-            contactViewModel.setContactList()
-            contactViewModel.contactDataLive.observe(this, Observer {
-                createAdapter(it)
-            })
-
-        }else{
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_CONTACTS),20)
+        create.setOnClickListener(){
+            var intent = Intent(this,CreateContactActivity::class.java)
+            startActivity(intent)
         }
+        if(!(ActivityCompat.checkSelfPermission(this,Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED)){
+           ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_CONTACTS),5)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        contactViewModel.setContactList()
+        contactViewModel.contactDataLive.observe(this, Observer {
+            createAdapter(it)
+        })
 
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -45,7 +56,10 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.importfile -> {
-                Toast.makeText(this,"Import",Toast.LENGTH_SHORT).show()
+                if(ActivityCompat.checkSelfPermission(this,Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED){
+                    ImportData(this).addContactData()
+                   contactViewModel.setContactList()
+                }
             }
             R.id.exportfile -> Toast.makeText(this,"Export",Toast.LENGTH_SHORT).show()
         }

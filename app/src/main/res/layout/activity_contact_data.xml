@@ -6,11 +6,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ContactDataActivity">
-    <include
-        android:id="@+id/actionbar"
-        layout="@layout/activity_actionbar"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:id="@+id/actionbar"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBaredit"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="Contact"
+            android:background="#6FEFE3"
+            app:menu="@menu/editdelete"
+            app:navigationIcon="@drawable/ic_action_goback"
+            style="@style/Widget.MaterialComponents.Toolbar.Surface"
+            />
+
+    </com.google.android.material.appbar.AppBarLayout>
     <FrameLayout
         android:layout_below="@+id/actionbar"
         android:id="@+id/contactimge"
@@ -35,16 +47,23 @@
             android:textSize="30sp"
             android:textStyle="bold" />
     </FrameLayout>
-    <RelativeLayout
-        android:layout_weight="2"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_weight="2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="50dp"
+            android:layout_width="30dp"
             android:id="@+id/mobile"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:layout_alignParentLeft="true"
             android:layout_margin="20dp"
             android:src="@drawable/ic_action_mobile" />
@@ -52,13 +71,189 @@
             android:id="@+id/mobilenumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/mobile"
             android:layout_margin="20dp"
-            android:text="Name"
+            android:text="Number"
             android:textColor="@color/black"
-            android:textSize="30sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
 
-    </RelativeLayout>
+         </LinearLayout>
+        <LinearLayout
+            android:layout_weight="2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="30dp"
+                android:id="@+id/company"
+                android:layout_height="30dp"
+                android:layout_alignParentLeft="true"
+                android:layout_margin="20dp"
+                android:src="@drawable/ic_action_company" />
+
+            <TextView
+                android:id="@+id/companyName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="Comppany"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+            <LinearLayout
+                android:layout_weight="2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="30dp"
+                    android:id="@+id/emailicon"
+                    android:layout_height="30dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_margin="20dp"
+                    android:src="@drawable/ic_action_email" />
+
+                <TextView
+                    android:id="@+id/emaildata"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:text="Email"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_weight="2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="30dp"
+                    android:id="@+id/groupicon"
+                    android:layout_height="30dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_margin="20dp"
+                    android:src="@drawable/ic_action_group" />
+
+                <TextView
+                    android:id="@+id/groupName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:text="Group"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_weight="2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="30dp"
+                    android:id="@+id/homeicon"
+                    android:layout_height="30dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_margin="20dp"
+                    android:src="@drawable/ic_action_address" />
+
+                <TextView
+                    android:id="@+id/addressview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:text="Address"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_weight="2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="30dp"
+                    android:id="@+id/nickicon"
+                    android:layout_height="30dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_margin="20dp"
+                    android:src="@drawable/ic_action_person" />
+
+                <TextView
+                    android:id="@+id/nickName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:text="Nick Name"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_weight="2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="30dp"
+                    android:id="@+id/noteicon"
+                    android:layout_height="30dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_margin="20dp"
+                    android:src="@drawable/ic_action_notes" />
+
+                <TextView
+                    android:id="@+id/Notes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:text="Note"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_weight="2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="30dp"
+                    android:id="@+id/websiteicon"
+                    android:layout_height="30dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_margin="20dp"
+                    android:src="@drawable/ic_action_website" />
+
+                <TextView
+                    android:id="@+id/web"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:text="Website"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
