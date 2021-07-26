@@ -13,14 +13,13 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBaredit"
+            style="@style/Widget.MaterialComponents.Toolbar.Surface"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Contact"
             android:background="#6FEFE3"
             app:menu="@menu/editdelete"
             app:navigationIcon="@drawable/ic_action_goback"
-            style="@style/Widget.MaterialComponents.Toolbar.Surface"
-            />
+            app:title="Contact" />
 
     </com.google.android.material.appbar.AppBarLayout>
     <FrameLayout
@@ -33,7 +32,6 @@
             android:layout_width="match_parent"
             android:layout_height="400dp"
             android:id="@+id/personpic"
-
             android:src="@drawable/ic_action_person"/>
 
         <TextView

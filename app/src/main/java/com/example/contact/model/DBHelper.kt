@@ -41,6 +41,27 @@ class DBHelper(val ctx : Context) : SQLiteOpenHelper(ctx,"ContactDB",null,1) {
             else  return true
         } else return false
     }
+    fun updateuserdata(name: String?, number: String?,company: String?,email: String?,contactgroup: String?,
+                       address: String?,nickname: String?,website: String?,notes: String?, keyNumber : String?): Boolean? {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put("name", name)
+        contentValues.put("number", number)
+        contentValues.put("company", company)
+        contentValues.put("email", email)
+        contentValues.put("contactgroup", contactgroup)
+        contentValues.put("address", address)
+        contentValues.put("nickname", nickname)
+        contentValues.put("website", website)
+        contentValues.put("notes", notes)
+        val cursor: Cursor =db.rawQuery("Select * from ContactDetails where number = ?", arrayOf(keyNumber))
+        if(cursor.count > 0){
+            var result = db.update("ContactDetails",contentValues,"number=?",arrayOf(keyNumber))
+            if (result == -1) return false
+            else return true
+        }
+        else return false
+    }
 
     fun getdata(): Cursor? {
         val DB = this.writableDatabase

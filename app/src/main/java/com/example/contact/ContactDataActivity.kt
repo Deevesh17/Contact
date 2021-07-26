@@ -1,17 +1,23 @@
 package com.example.contact
 
+import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Base64
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.example.contact.model.DBHelper
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.activity_actionbar.*
 import kotlinx.android.synthetic.main.activity_contact_data.*
 import kotlinx.android.synthetic.main.activity_create_contact.*
 import kotlinx.android.synthetic.main.fieldtext.view.*
+import java.io.ByteArrayOutputStream
 
 class ContactDataActivity : AppCompatActivity() {
     val contactDb = DBHelper(this)
@@ -59,10 +65,33 @@ class ContactDataActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.delete ->{
-                val result : Boolean? =  contactDb.deletedata(mobilenumber.text.toString())
-                if(result == true ){
-                    onBackPressed()
-                }
+                MaterialAlertDialogBuilder(this)
+                    .setTitle("Delete Contact")
+                    .setMessage("Delete the contact info of ${personname.text} from this device?")
+                    .setNeutralButton("Cancel") { dialog, which ->
+                    }
+                    .setPositiveButton("Delete") { dialog, which ->
+                        val result : Boolean? =  contactDb.deletedata(mobilenumber.text.toString())
+                        if(result == true ){
+                            onBackPressed()
+                        }
+                    }
+                    .show()
+
+            }
+            R.id.edit -> {
+                var intent : Intent = Intent(this,UpdateActivity::class.java)
+                intent.putExtra("personName",personname.text)
+                intent.putExtra("personNumber",mobilenumber.text)
+                intent.putExtra("company",companyName.text)
+                intent.putExtra("email",emaildata.text)
+                intent.putExtra("notes",Notes.text)
+                intent.putExtra("group",groupName.text)
+                intent.putExtra("address",addressview.text)
+                intent.putExtra("website",web.text)
+                intent.putExtra("nickname",nickName.text)
+
+                startActivity(intent)
             }
         }
         return true
