@@ -47,42 +47,4 @@ class ImportData(val ctx: Context) {
             contact.close()
         }
     }
-    fun getdatafromDb() : ArrayList<ContactData> {
-        var cursor: Cursor? = contactDb.getdata()
-        if (cursor?.count != 0) {
-            while (cursor?.moveToNext()!!) {
-                if (cursor.getString(2) != null) {
-                    var comressed = Base64.decode(cursor.getString(2), Base64.DEFAULT)
-                    contactList.add(
-                        ContactData(
-                            cursor.getString(0),
-                            cursor.getString(1),
-                            BitmapFactory.decodeByteArray(comressed, 0, comressed.size),cursor.getString(3),
-                            cursor.getString(4),
-                            cursor.getString(5),
-                            cursor.getString(6),
-                            cursor.getString(7),
-                            cursor.getString(8),
-                            cursor.getString(9)
-                        )
-                    )
-                } else {
-                    contactList.add(ContactData(
-                        cursor.getString(0),
-                        cursor.getString(1),
-                        null,
-                        cursor.getString(3),
-                        cursor.getString(4),
-                        cursor.getString(5),
-                        cursor.getString(6),
-                        cursor.getString(7),
-                        cursor.getString(8),
-                        cursor.getString(9)
-                    ))
-                }
-            }
-        }
-        return contactList
-
-    }
 }

@@ -3,6 +3,7 @@
     package="com.example.contact">
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -11,7 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Contact">
-        <activity android:name=".UpdateActivity"></activity>
+        <service
+            android:name=".ContactDbList"
+            android:enabled="true"
+            android:exported="true"></service>
+        <activity android:name=".UpdateActivity" />
         <activity android:name=".CreateContactActivity" />
         <activity android:name=".ContactDataActivity" />
         <activity android:name=".MainActivity">

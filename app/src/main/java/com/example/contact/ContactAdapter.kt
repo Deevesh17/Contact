@@ -24,7 +24,6 @@ class ContactAdapter(val contact : ArrayList<ContactData>) : RecyclerView.Adapte
         val view  = layoutinflater.inflate(R.layout.activity_listdesign,parent,false)
         return contactViewHolder(view)
     }
-
     override fun onBindViewHolder(holder: contactViewHolder, position: Int) {
         holder.name.setText(contact[position].name)
         holder.number.setText(contact[position].number)
@@ -37,22 +36,7 @@ class ContactAdapter(val contact : ArrayList<ContactData>) : RecyclerView.Adapte
         }
         holder.itemView.setOnClickListener(){
             var intent : Intent = Intent(holder.itemView.context,ContactDataActivity::class.java)
-            println(contact[position])
-            intent.putExtra("personName",contact[position].name)
-            intent.putExtra("personNumber",contact[position].number)
-            intent.putExtra("company",contact[position].company)
-            intent.putExtra("email",contact[position].email)
-            intent.putExtra("notes",contact[position].notes)
-            intent.putExtra("group",contact[position].contactgroup)
-            intent.putExtra("address",contact[position].address)
-            intent.putExtra("website",contact[position].website)
-            intent.putExtra("nickname",contact[position].nickname)
-            if(contact[position].profile != null){
-                var stream = ByteArrayOutputStream()
-                contact[position].profile?.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-                var compressedByte = stream.toByteArray()
-                intent.putExtra("profile", Base64.encodeToString(compressedByte, Base64.DEFAULT))
-            }
+            intent.putExtra("contactid",contact[position].contactId)
             startActivity(holder.itemView.context,intent,null)
         }
     }

@@ -11,11 +11,5 @@ class ContactViewModel(val ctx : Context) : ViewModel() {
     private fun importData() : ImportData{
         return ImportData(ctx)
     }
-    public fun setContactList(){
-        contactDataLive.value = importData().getdatafromDb()
-    }
-    public fun getContactList(): ArrayList<ContactData>{
-        return contactDataLive.value!!
-    }
 
 }

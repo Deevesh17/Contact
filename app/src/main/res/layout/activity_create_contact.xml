@@ -81,8 +81,8 @@
                 app:hintTextColor="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
                     android:id="@+id/company"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -121,8 +121,8 @@
                 app:hintTextColor="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
                     android:id="@+id/email"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -150,22 +150,23 @@
                     android:inputType="none"
                     android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
+
             <LinearLayout
                 android:id="@+id/dynamicfield"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
 
             <Button
+                android:id="@+id/addfield"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:padding="10dp"
                 android:text="Add Another Field"
-                android:textColor="@color/black"
-                android:id="@+id/addfield"
-                android:layout_margin="10dp"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:textColor="@color/black" />
         </LinearLayout>
     </ScrollView>
 
