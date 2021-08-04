@@ -55,4 +55,13 @@
         android:gravity="center"
         android:padding="10dp"
         android:textSize="16sp"/>
+    <TextView
+        android:id="@+id/aditionalnumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Additional Number"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textSize="16sp"/>
 </LinearLayout>

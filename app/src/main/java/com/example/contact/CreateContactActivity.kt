@@ -121,6 +121,12 @@ class CreateContactActivity : AppCompatActivity() {
             view.additionalhint.hint = "Website"
             addAdditionalField(view)
         }
+        bottomSheetView.findViewById<View>(R.id.aditionalnumber).setOnClickListener(){
+            bottomsheet.dismiss()
+            val view = layoutInflater.inflate(R.layout.fieldtext,null)
+            view.additionalhint.hint = "Mobile"
+            addAdditionalField(view)
+        }
         bottomsheet.setContentView(bottomSheetView)
         bottomsheet.show()
     }
@@ -136,6 +142,7 @@ class CreateContactActivity : AppCompatActivity() {
                var nickname:String? = null
                var website :String? = null
                var notes :String? = null
+               var mobile :String = personNumber.text.toString()
                for(index in 0..childcnt){
                    if(dynamicfield.getChildAt(index) != null){
                        when(dynamicfield.getChildAt(index).additionalhint.hint){
@@ -143,10 +150,15 @@ class CreateContactActivity : AppCompatActivity() {
                            "Notes" -> notes = dynamicfield.getChildAt(index).additionaltext.text.toString()
                            "NickName" -> nickname = dynamicfield.getChildAt(index).additionaltext.text.toString()
                            "Website" -> website = dynamicfield.getChildAt(index).additionaltext.text.toString()
+                           "Mobile" -> {
+                               println(mobile)
+                               mobile += "\n${dynamicfield.getChildAt(index).additionaltext.text.toString()}"
+                           }
                        }
                    }
                }
-               var result : Boolean? = contactDb.insertuserdata(personName.text.toString(),personNumber.text.toString(),base64image,company.text.toString(),
+               println(mobile)
+               var result : Boolean? = contactDb.insertuserdata(personName.text.toString(),mobile,base64image,company.text.toString(),
                    email.text.toString(),selectgroup.text.toString(),address,nickname, website, notes)
                if(result == true){
                    onBackPressed()
