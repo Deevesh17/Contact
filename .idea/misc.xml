@@ -4,10 +4,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/activity_contact_data.xml" value="0.24166666666666667" />
+        <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/activity_create_contact.xml" value="0.2441123188405797" />
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/activity_main.xml" value="0.24682971014492755" />
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/activity_update.xml" value="0.24547101449275363" />
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/additional_field.xml" value="0.24166666666666667" />
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/field_in_data.xml" value="0.24166666666666667" />
+        <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/fieldtext.xml" value="0.2441123188405797" />
       </map>
     </option>
   </component>

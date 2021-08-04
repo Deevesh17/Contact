@@ -41,7 +41,7 @@ class ContactDataActivity : AppCompatActivity() {
         if(cursor?.count != 0){
             while (cursor?.moveToNext()!!) {
                 personname.setText(cursor?.getString(1))
-                mobilenumber.setText(cursor?.getString(2))
+                mobilenumber.setText(cursor?.getString(2).replace(",","\n"))
                 if(cursor?.getString(3) != null){
                     var comressed  = Base64.decode(cursor?.getString(3),Base64.DEFAULT)
                     personpic.setImageBitmap(BitmapFactory.decodeByteArray(comressed,0,comressed.size))
@@ -106,7 +106,7 @@ class ContactDataActivity : AppCompatActivity() {
 
             }
             R.id.edit -> {
-                var intent : Intent = Intent(this,UpdateActivity::class.java)
+                var intent : Intent = Intent(this,CreateContactActivity::class.java)
                 intent.putExtra("contactid",contactId)
                 startActivity(intent)
             }

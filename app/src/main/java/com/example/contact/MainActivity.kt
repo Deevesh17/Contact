@@ -122,7 +122,6 @@ import java.lang.Exception
             var cursor: Cursor? = contactDb.getdata()
             var count = 0
             cursorTotal = cursor?.count!!
-            println(cursorTotal)
             try{
             if (cursorTotal != 0) {
                 while (cursor?.moveToNext()) {

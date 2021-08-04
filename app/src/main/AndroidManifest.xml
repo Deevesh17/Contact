@@ -16,7 +16,6 @@
             android:name=".ContactDbList"
             android:enabled="true"
             android:exported="true"></service>
-        <activity android:name=".UpdateActivity" />
         <activity android:name=".CreateContactActivity" />
         <activity android:name=".ContactDataActivity" />
         <activity android:name=".MainActivity">

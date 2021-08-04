@@ -3,7 +3,9 @@ package com.example.contact
 import android.app.Instrumentation
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -14,6 +16,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.view.setPadding
 import com.example.contact.model.DBHelper
@@ -28,6 +31,7 @@ import java.io.ByteArrayOutputStream
 import java.lang.Exception
 
 class CreateContactActivity : AppCompatActivity() {
+    var contactId = 0
     val contactDb = DBHelper(this)
     var base64image : String? = null
     override fun onResume() {
@@ -39,6 +43,10 @@ class CreateContactActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_contact)
+        contactId = intent.getIntExtra("contactid", -1)
+        if (contactId != -1){
+            topAppBarCreate.title = "Update Contact"
+        }
         topAppBarCreate.setNavigationOnClickListener {
             onBackPressed()
         }
@@ -54,6 +62,67 @@ class CreateContactActivity : AppCompatActivity() {
             }
             else{
                 ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),101)
+            }
+        }
+        if(contactId != -1){
+            var cursor: Cursor? = contactDb.getDetailedData(contactId)
+            if (cursor?.count != 0) {
+                while (cursor?.moveToNext()!!) {
+                    personName.setText(cursor?.getString(1))
+                    if(cursor?.getString(2) != null){
+                        var splitedNumber = cursor?.getString(2).split(',')
+                        var numbercount = 0
+                        if(splitedNumber.size > 1){
+                            for(numb in splitedNumber){
+                                if (numbercount == 0) {
+                                    personNumber.setText(numb)
+                                    numbercount++
+                                }
+                                else {
+                                    val view = layoutInflater.inflate(R.layout.fieldtext, null)
+                                    view.additionalhint.hint = "Mobile"
+                                    view.additionaltext.setText(numb)
+                                    addAdditionalField(view)
+                                }
+                            }
+                        }
+                    }
+                    if (cursor?.getString(3) != null) {
+                        base64image = cursor?.getString(3)
+                        var comressed = Base64.decode(cursor?.getString(3), Base64.DEFAULT)
+                        profileimagecreate.setImageBitmap(BitmapFactory.decodeByteArray(comressed,
+                            0,
+                            comressed.size))
+                    }
+                    if (cursor?.getString(5) != null) email.setText(cursor?.getString(5))
+                    if (cursor?.getString(4) != null) company.setText(cursor?.getString(4))
+                    if (cursor?.getString(6) != null) selectgroup.setText(cursor?.getString(6))
+                    if (cursor?.getString(7) != null) {
+                        val view = layoutInflater.inflate(R.layout.fieldtext,null)
+                        view.additionalhint.hint = "Address"
+                        view.additionaltext.setText(cursor?.getString(7))
+                        addAdditionalField(view)
+                    }
+                   if (cursor?.getString(9) != null) {
+                        val view = layoutInflater.inflate(R.layout.fieldtext,null)
+                        view.additionalhint.hint = "Website"
+                        view.additionaltext.setText(cursor?.getString(9))
+                        addAdditionalField(view)
+                    }
+                    if (cursor?.getString(10) != null) {
+                        val view = layoutInflater.inflate(R.layout.fieldtext,null)
+                        view.additionaltext.setPadding(80)
+                        view.additionalhint.hint = "Notes"
+                        view.additionaltext.setText(cursor?.getString(10))
+                        addAdditionalField(view)
+                    }
+                    if (cursor?.getString(8) != null){
+                        val view = layoutInflater.inflate(R.layout.fieldtext,null)
+                        view.additionalhint.hint = "NickName"
+                        view.additionaltext.setText(cursor?.getString(8))
+                        addAdditionalField(view)
+                    }
+                }
             }
         }
     }
@@ -151,17 +220,44 @@ class CreateContactActivity : AppCompatActivity() {
                            "NickName" -> nickname = dynamicfield.getChildAt(index).additionaltext.text.toString()
                            "Website" -> website = dynamicfield.getChildAt(index).additionaltext.text.toString()
                            "Mobile" -> {
-                               println(mobile)
-                               mobile += "\n${dynamicfield.getChildAt(index).additionaltext.text.toString()}"
+                               mobile += ",${dynamicfield.getChildAt(index).additionaltext.text.toString()}"
                            }
                        }
                    }
                }
-               println(mobile)
-               var result : Boolean? = contactDb.insertuserdata(personName.text.toString(),mobile,base64image,company.text.toString(),
-                   email.text.toString(),selectgroup.text.toString(),address,nickname, website, notes)
-               if(result == true){
-                   onBackPressed()
+               println(contactId)
+               if(contactId == -1 ) {
+                   var result: Boolean? = contactDb.insertuserdata(personName.text.toString(),
+                       mobile,
+                       base64image,
+                       company.text.toString(),
+                       email.text.toString(),
+                       selectgroup.text.toString(),
+                       address,
+                       nickname,
+                       website,
+                       notes)
+                   if (result == true) {
+                       onBackPressed()
+                   }
+               }else{
+                   println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                   var result : Boolean? = contactDb.updateuserdata(
+                       personName.text.toString(),
+                       mobile,
+                       company.text.toString(),
+                       email.text.toString(),
+                       selectgroup.text.toString(),
+                       address,
+                       nickname,
+                       website,
+                       notes,
+                       contactId,
+                       base64image
+                   )
+                   if(result == true){
+                       onBackPressed()
+                   }
                }
            }
         }
