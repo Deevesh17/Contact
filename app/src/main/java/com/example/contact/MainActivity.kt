@@ -123,6 +123,7 @@ import java.lang.Exception
             var count = 0
             cursorTotal = cursor?.count!!
             println(cursorTotal)
+            try{
             if (cursorTotal != 0) {
                 while (cursor?.moveToNext()) {
                     if (cursor.getString(3) != null) {
@@ -161,6 +162,9 @@ import java.lang.Exception
                     count++
 
                 }
+            }
+            }catch (e :Exception){
+                println(e)
             }
            return null
         }

@@ -42,11 +42,12 @@ class DBHelper(val ctx : Context) : SQLiteOpenHelper(ctx,"ContactDB",null,1) {
         } else return false
     }
     fun updateuserdata(name: String?, number: String?,company: String?,email: String?,contactgroup: String?,
-                       address: String?,nickname: String?,website: String?,notes: String?, id : Int): Boolean? {
+                       address: String?,nickname: String?,website: String?,notes: String?, id : Int,image : String?): Boolean? {
         val db = this.writableDatabase
         val contentValues = ContentValues()
         contentValues.put("name", name)
         contentValues.put("number", number)
+        contentValues.put("image", image)
         contentValues.put("company", company)
         contentValues.put("email", email)
         contentValues.put("contactgroup", contactgroup)

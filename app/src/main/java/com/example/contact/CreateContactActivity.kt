@@ -82,7 +82,7 @@ class CreateContactActivity : AppCompatActivity() {
                 var bitmap = MediaStore.Images.Media.getBitmap(contentResolver,uri)
                 profileimagecreate.setImageBitmap(bitmap)
                 var stream = ByteArrayOutputStream()
-                bitmap.compress(Bitmap.CompressFormat.JPEG,80,stream)
+                bitmap.compress(Bitmap.CompressFormat.JPEG,50,stream)
                 var byte = stream.toByteArray()
                 base64image = Base64.encodeToString(byte,Base64.DEFAULT)
             }catch (e : Exception){
