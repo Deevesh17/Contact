@@ -1,19 +1,19 @@
 package com.example.contact
 
+import android.app.Dialog
 import android.app.Instrumentation
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.activity_create_contact.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.additional_field.*
 import kotlinx.android.synthetic.main.additional_field.view.*
+import kotlinx.android.synthetic.main.chooseimage.*
 import kotlinx.android.synthetic.main.fieldtext.*
 import kotlinx.android.synthetic.main.fieldtext.view.*
 import java.io.ByteArrayOutputStream
@@ -56,13 +57,9 @@ class CreateContactActivity : AppCompatActivity() {
         topAppBarCreate.setOnMenuItemClickListener {
             onOptionsItemSelected(it)
         }
-        profileimagecreate.setOnClickListener(){
-            if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-                getImage()
-            }
-            else{
-                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),101)
-            }
+        profileimagecreate.setOnClickListener{
+            println("~~~~~~~~~~~~~~~~~~")
+           imagebottomitem()
         }
         if(contactId != -1){
             var cursor: Cursor? = contactDb.getDetailedData(contactId)
@@ -131,7 +128,12 @@ class CreateContactActivity : AppCompatActivity() {
         intent.setType("image/*")
         startActivityForResult(Intent.createChooser(intent,"Select Image"),102)
     }
-
+    fun takePicture(){
+        var intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if(intent.resolveActivity(packageManager) != null){
+            startActivityForResult(intent,103)
+        }
+    }
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -140,6 +142,9 @@ class CreateContactActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if(requestCode == 101 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
             getImage()
+        }
+        if(requestCode == 104 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            takePicture()
         }
     }
 
@@ -158,13 +163,53 @@ class CreateContactActivity : AppCompatActivity() {
                 println(e)
             }
         }
+        if(requestCode == 103 && resultCode == RESULT_OK && data != null){
+            var bundle = data.extras
+            try {
+                var bitmap = bundle?.get("data") as Bitmap
+                profileimagecreate.setImageBitmap(bitmap)
+                var stream = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.JPEG,50,stream)
+                var byte = stream.toByteArray()
+                base64image = Base64.encodeToString(byte,Base64.DEFAULT)
+            }catch (e : Exception){
+                println(e)
+            }
+        }
     }
     private fun addAdditionalField(view :View){
         dynamicfield.addView(view)
     }
+    fun imagebottomitem(){
+        var cooseimage = Dialog(this)
+        cooseimage.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        cooseimage.setContentView(R.layout.chooseimage)
+        cooseimage.galary.setOnClickListener {
+            if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+                cooseimage.dismiss()
+                getImage()
+            }
+            else{
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),101)
+            }
+        }
+        cooseimage.camera.setOnClickListener {
+            if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+                cooseimage.dismiss()
+                takePicture()
+            }
+            else{
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA),104)
+            }
+        }
+        cooseimage.show()
+        cooseimage.window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+        cooseimage.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        cooseimage.window?.setGravity(Gravity.CENTER)
+    }
     private fun bottomItemClicked(){
         val bottomsheet = BottomSheetDialog(this@CreateContactActivity,R.style.BottomSheetDialogTheam)
-        val bottomSheetView = LayoutInflater.from(applicationContext).inflate(R.layout.additional_field,fieldslist as LinearLayout?)
+        val bottomSheetView = LayoutInflater.from(applicationContext).inflate(R.layout.additional_field,fieldslist)
         bottomSheetView.findViewById<View>(R.id.address).setOnClickListener(){
             bottomsheet.dismiss()
             val view = layoutInflater.inflate(R.layout.fieldtext,null)
@@ -225,7 +270,6 @@ class CreateContactActivity : AppCompatActivity() {
                        }
                    }
                }
-               println(contactId)
                if(contactId == -1 ) {
                    var result: Boolean? = contactDb.insertuserdata(personName.text.toString(),
                        mobile,
@@ -241,7 +285,6 @@ class CreateContactActivity : AppCompatActivity() {
                        onBackPressed()
                    }
                }else{
-                   println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
                    var result : Boolean? = contactDb.updateuserdata(
                        personName.text.toString(),
                        mobile,

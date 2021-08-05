@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.util.Base64
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
@@ -21,11 +22,14 @@ import com.example.contact.model.DBHelper
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.progreesbar.*
 import java.lang.Exception
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.reflect.KProperty
 
  class MainActivity : AppCompatActivity() {
     var contactList :ArrayList<ContactData> = ArrayList<ContactData>()
     val contactDb = DBHelper(this)
-     lateinit var dialog : Dialog
+    lateinit var dialog : Dialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -74,7 +78,6 @@ import java.lang.Exception
         }
         return true
     }
-
      override fun onRequestPermissionsResult(
          requestCode: Int,
          permissions: Array<out String>,
@@ -179,3 +182,7 @@ import java.lang.Exception
         }
     }
 }
+
+ private operator fun Any.setValue(mainActivity: MainActivity, property: KProperty<*>, searchView: SearchView) {
+
+ }
