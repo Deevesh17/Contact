@@ -58,7 +58,6 @@ class CreateContactActivity : AppCompatActivity() {
             onOptionsItemSelected(it)
         }
         profileimagecreate.setOnClickListener{
-            println("~~~~~~~~~~~~~~~~~~")
            imagebottomitem()
         }
         if(contactId != -1){
@@ -69,8 +68,9 @@ class CreateContactActivity : AppCompatActivity() {
                     if(cursor?.getString(2) != null){
                         var splitedNumber = cursor?.getString(2).split(',')
                         var numbercount = 0
-                        if(splitedNumber.size > 1){
+                        if(splitedNumber.size > 0){
                             for(numb in splitedNumber){
+                                println(numb)
                                 if (numbercount == 0) {
                                     personNumber.setText(numb)
                                     numbercount++
@@ -190,6 +190,7 @@ class CreateContactActivity : AppCompatActivity() {
                 getImage()
             }
             else{
+                cooseimage.dismiss()
                 ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),101)
             }
         }
@@ -199,6 +200,7 @@ class CreateContactActivity : AppCompatActivity() {
                 takePicture()
             }
             else{
+                cooseimage.dismiss()
                 ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA),104)
             }
         }

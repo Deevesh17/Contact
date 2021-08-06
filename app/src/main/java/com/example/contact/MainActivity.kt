@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.util.Base64
 import android.view.Menu
 import android.view.MenuItem
@@ -74,7 +75,17 @@ import kotlin.reflect.KProperty
                 }
 
             }
-            R.id.exportfile -> Toast.makeText(this,"Export",Toast.LENGTH_SHORT).show()
+            R.id.exportfile ->{
+                try{
+                    if(ActivityCompat.checkSelfPermission(this,Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED){
+                        writeContact()
+                    }else{
+                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_CONTACTS),25)
+                    }
+                }catch (e : Exception){
+                    println(e)
+                }
+            }
         }
         return true
     }
@@ -89,6 +100,11 @@ import kotlin.reflect.KProperty
                  createWorker()
              }
          }
+         if(requestCode == 25){
+             if(ActivityCompat.checkSelfPermission(this,Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED){
+                 writeContact()
+             }
+         }
          if(requestCode == 55){
              if(!(ActivityCompat.checkSelfPermission(this,Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED)){
                  Toast.makeText(this,"Permission Denied",Toast.LENGTH_SHORT).show()
@@ -101,6 +117,17 @@ import kotlin.reflect.KProperty
      override fun onPause() {
          super.onPause()
          dialog.dismiss()
+     }
+     fun writeContact(){
+         Toast.makeText(this,"Export",Toast.LENGTH_SHORT).show()
+         var workManager = WorkManager.getInstance(applicationContext)
+         val import = OneTimeWorkRequest.Builder(ExportContact::class.java).build()
+         workManager.enqueue(import)
+         workManager.getWorkInfoByIdLiveData(import.id).observe(this, Observer {
+             if(it.state.name == "SUCCEEDED"){
+                 println("~~~~~~~~~~~~~")
+             }
+         })
      }
      fun createWorker(){
          dialog.importdetails.setText("Importing...")

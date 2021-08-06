@@ -13,7 +13,6 @@ import java.io.ByteArrayOutputStream
 
 class ImportData(val ctx: Context) {
     val contactDb = DBHelper(ctx)
-    var contactList : ArrayList<ContactData> = ArrayList<ContactData>()
     fun addContactData() {
         val contact = ctx.contentResolver.query(
             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
@@ -24,12 +23,14 @@ class ImportData(val ctx: Context) {
         )
         if (contact != null) {
             while (contact.moveToNext()) {
+
                 val personName =
                     contact.getString(contact.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
                 val personNumber =
                     contact.getString(contact.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
                 val personprofile =
                     contact.getString(contact.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI))
+
                 var profile: Bitmap? = null
                 var profileBitmap : String? = null
                 if (personprofile != null) {
