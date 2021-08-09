@@ -1,7 +1,6 @@
 package com.example.contact
 
 import android.app.Dialog
-import android.app.Instrumentation
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
@@ -15,8 +14,6 @@ import android.provider.MediaStore
 import android.util.Base64
 import android.view.*
 import android.widget.ArrayAdapter
-import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.view.setPadding
 import com.example.contact.model.DBHelper
@@ -32,9 +29,9 @@ import java.io.ByteArrayOutputStream
 import java.lang.Exception
 
 class CreateContactActivity : AppCompatActivity() {
-    var contactId = 0
-    val contactDb = DBHelper(this)
-    var base64image : String? = null
+    private var contactId = 0
+    private val contactDb = DBHelper(this)
+    private var base64image : String? = null
     override fun onResume() {
         super.onResume()
         val group = resources.getStringArray(R.array.group)
@@ -61,14 +58,14 @@ class CreateContactActivity : AppCompatActivity() {
            imagebottomitem()
         }
         if(contactId != -1){
-            var cursor: Cursor? = contactDb.getDetailedData(contactId)
+            val cursor: Cursor? = contactDb.getDetailedData(contactId)
             if (cursor?.count != 0) {
                 while (cursor?.moveToNext()!!) {
-                    personName.setText(cursor?.getString(1))
-                    if(cursor?.getString(2) != null){
-                        var splitedNumber = cursor?.getString(2).split(',')
+                    personName.setText(cursor.getString(1))
+                    if(cursor.getString(2) != null){
+                        val splitedNumber = cursor.getString(2).split(',')
                         var numbercount = 0
-                        if(splitedNumber.size > 0){
+                        if(splitedNumber.isNotEmpty()){
                             for(numb in splitedNumber){
                                 println(numb)
                                 if (numbercount == 0) {
@@ -84,52 +81,52 @@ class CreateContactActivity : AppCompatActivity() {
                             }
                         }
                     }
-                    if (cursor?.getString(3) != null) {
-                        base64image = cursor?.getString(3)
-                        var comressed = Base64.decode(cursor?.getString(3), Base64.DEFAULT)
+                    if (cursor.getString(3) != null) {
+                        base64image = cursor.getString(3)
+                        val comressed = Base64.decode(cursor.getString(3), Base64.DEFAULT)
                         profileimagecreate.setImageBitmap(BitmapFactory.decodeByteArray(comressed,
                             0,
                             comressed.size))
                     }
-                    if (cursor?.getString(5) != null) email.setText(cursor?.getString(5))
-                    if (cursor?.getString(4) != null) company.setText(cursor?.getString(4))
-                    if (cursor?.getString(6) != null) selectgroup.setText(cursor?.getString(6))
-                    if (cursor?.getString(7) != null) {
+                    if (cursor.getString(5) != null) email.setText(cursor.getString(5))
+                    if (cursor.getString(4) != null) company.setText(cursor.getString(4))
+                    if (cursor.getString(6) != null) selectgroup.setText(cursor.getString(6))
+                    if (cursor.getString(7) != null) {
                         val view = layoutInflater.inflate(R.layout.fieldtext,null)
                         view.additionalhint.hint = "Address"
-                        view.additionaltext.setText(cursor?.getString(7))
+                        view.additionaltext.setText(cursor.getString(7))
                         addAdditionalField(view)
                     }
-                   if (cursor?.getString(9) != null) {
+                   if (cursor.getString(9) != null) {
                         val view = layoutInflater.inflate(R.layout.fieldtext,null)
                         view.additionalhint.hint = "Website"
-                        view.additionaltext.setText(cursor?.getString(9))
+                        view.additionaltext.setText(cursor.getString(9))
                         addAdditionalField(view)
                     }
-                    if (cursor?.getString(10) != null) {
+                    if (cursor.getString(10) != null) {
                         val view = layoutInflater.inflate(R.layout.fieldtext,null)
                         view.additionaltext.setPadding(80)
                         view.additionalhint.hint = "Notes"
-                        view.additionaltext.setText(cursor?.getString(10))
+                        view.additionaltext.setText(cursor.getString(10))
                         addAdditionalField(view)
                     }
-                    if (cursor?.getString(8) != null){
+                    if (cursor.getString(8) != null){
                         val view = layoutInflater.inflate(R.layout.fieldtext,null)
                         view.additionalhint.hint = "NickName"
-                        view.additionaltext.setText(cursor?.getString(8))
+                        view.additionaltext.setText(cursor.getString(8))
                         addAdditionalField(view)
                     }
                 }
             }
         }
     }
-    fun getImage(){
-        var intent = Intent(Intent.ACTION_PICK)
+    private fun getImage(){
+        val intent = Intent(Intent.ACTION_PICK)
         intent.setType("image/*")
         startActivityForResult(Intent.createChooser(intent,"Select Image"),102)
     }
-    fun takePicture(){
-        var intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+    private fun takePicture(){
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if(intent.resolveActivity(packageManager) != null){
             startActivityForResult(intent,103)
         }
@@ -151,26 +148,26 @@ class CreateContactActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 102 && resultCode == RESULT_OK && data != null){
-            var uri = data.data
+            val uri = data.data
             try {
-                var bitmap = MediaStore.Images.Media.getBitmap(contentResolver,uri)
+                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,uri)
                 profileimagecreate.setImageBitmap(bitmap)
-                var stream = ByteArrayOutputStream()
+                val stream = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.JPEG,50,stream)
-                var byte = stream.toByteArray()
+                val byte = stream.toByteArray()
                 base64image = Base64.encodeToString(byte,Base64.DEFAULT)
             }catch (e : Exception){
                 println(e)
             }
         }
         if(requestCode == 103 && resultCode == RESULT_OK && data != null){
-            var bundle = data.extras
+            val bundle = data.extras
             try {
-                var bitmap = bundle?.get("data") as Bitmap
+                val bitmap = bundle?.get("data") as Bitmap
                 profileimagecreate.setImageBitmap(bitmap)
-                var stream = ByteArrayOutputStream()
+                val stream = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.JPEG,50,stream)
-                var byte = stream.toByteArray()
+                val byte = stream.toByteArray()
                 base64image = Base64.encodeToString(byte,Base64.DEFAULT)
             }catch (e : Exception){
                 println(e)
@@ -180,8 +177,8 @@ class CreateContactActivity : AppCompatActivity() {
     private fun addAdditionalField(view :View){
         dynamicfield.addView(view)
     }
-    fun imagebottomitem(){
-        var cooseimage = Dialog(this)
+    private fun imagebottomitem(){
+        val cooseimage = Dialog(this)
         cooseimage.requestWindowFeature(Window.FEATURE_NO_TITLE)
         cooseimage.setContentView(R.layout.chooseimage)
         cooseimage.galary.setOnClickListener {
@@ -212,32 +209,32 @@ class CreateContactActivity : AppCompatActivity() {
     private fun bottomItemClicked(){
         val bottomsheet = BottomSheetDialog(this@CreateContactActivity,R.style.BottomSheetDialogTheam)
         val bottomSheetView = LayoutInflater.from(applicationContext).inflate(R.layout.additional_field,fieldslist)
-        bottomSheetView.findViewById<View>(R.id.address).setOnClickListener(){
+        bottomSheetView.findViewById<View>(R.id.address).setOnClickListener{
             bottomsheet.dismiss()
             val view = layoutInflater.inflate(R.layout.fieldtext,null)
             view.additionalhint.hint = "Address"
             addAdditionalField(view)
         }
-        bottomSheetView.findViewById<View>(R.id.nickname).setOnClickListener(){
+        bottomSheetView.findViewById<View>(R.id.nickname).setOnClickListener{
             bottomsheet.dismiss()
             val view = layoutInflater.inflate(R.layout.fieldtext,null)
             view.additionalhint.hint = "NickName"
             addAdditionalField(view)
         }
-        bottomSheetView.findViewById<View>(R.id.notes).setOnClickListener(){
+        bottomSheetView.findViewById<View>(R.id.notes).setOnClickListener{
             bottomsheet.dismiss()
             val view = layoutInflater.inflate(R.layout.fieldtext,null)
             view.additionalhint.hint = "Notes"
             view.additionaltext.setPadding(80)
             addAdditionalField(view)
         }
-        bottomSheetView.findViewById<View>(R.id.website).setOnClickListener(){
+        bottomSheetView.findViewById<View>(R.id.website).setOnClickListener{
             bottomsheet.dismiss()
             val view = layoutInflater.inflate(R.layout.fieldtext,null)
             view.additionalhint.hint = "Website"
             addAdditionalField(view)
         }
-        bottomSheetView.findViewById<View>(R.id.aditionalnumber).setOnClickListener(){
+        bottomSheetView.findViewById<View>(R.id.aditionalnumber).setOnClickListener{
             bottomsheet.dismiss()
             val view = layoutInflater.inflate(R.layout.fieldtext,null)
             view.additionalhint.hint = "Mobile"
@@ -253,7 +250,7 @@ class CreateContactActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
            R.id.save ->{
-               var childcnt = dynamicfield.childCount
+               val childcnt = dynamicfield.childCount
                var address :String?= null
                var nickname:String? = null
                var website :String? = null
@@ -273,7 +270,7 @@ class CreateContactActivity : AppCompatActivity() {
                    }
                }
                if(contactId == -1 ) {
-                   var result: Boolean? = contactDb.insertuserdata(personName.text.toString(),
+                   val result: Boolean = contactDb.insertuserdata(personName.text.toString(),
                        mobile,
                        base64image,
                        company.text.toString(),
@@ -283,11 +280,11 @@ class CreateContactActivity : AppCompatActivity() {
                        nickname,
                        website,
                        notes)
-                   if (result == true) {
+                   if (result) {
                        onBackPressed()
                    }
                }else{
-                   var result : Boolean? = contactDb.updateuserdata(
+                   val result : Boolean = contactDb.updateuserdata(
                        personName.text.toString(),
                        mobile,
                        company.text.toString(),
@@ -300,7 +297,7 @@ class CreateContactActivity : AppCompatActivity() {
                        contactId,
                        base64image
                    )
-                   if(result == true){
+                   if(result){
                        onBackPressed()
                    }
                }

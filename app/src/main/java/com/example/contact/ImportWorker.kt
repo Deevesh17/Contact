@@ -20,7 +20,6 @@ class ImportWorker(var context: Context, var workerParams: WorkerParameters) : W
            ImportData(applicationContext).addContactData()
            return Result.success()
        }catch (e:Exception){
-           println(e)
            return Result.failure()
        }
     }

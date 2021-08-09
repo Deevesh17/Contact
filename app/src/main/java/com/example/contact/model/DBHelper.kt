@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
 
-class DBHelper(val ctx : Context) : SQLiteOpenHelper(ctx,"ContactDB",null,1) {
+class DBHelper(ctx : Context) : SQLiteOpenHelper(ctx,"ContactDB",null,1) {
     override fun onCreate(db: SQLiteDatabase?) {
         db?.execSQL("CREATE TABLE ContactDetails(id  INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,number TEXT,image TEXT,company TEXT,email TEXT,contactgroup TEXT,address TEXT,nickname TEXT,website TEXT,notes TEXT)")
     }
@@ -15,7 +15,7 @@ class DBHelper(val ctx : Context) : SQLiteOpenHelper(ctx,"ContactDB",null,1) {
         db?.execSQL("drop Table if exists ContactDetails")
     }
     fun insertuserdata(name: String?, number: String?, image: String?,company: String?,email: String?,contactgroup: String?,
-                       address: String?,nickname: String?,website: String?,notes: String?): Boolean? {
+                       address: String?,nickname: String?,website: String?,notes: String?): Boolean {
         val db = this.writableDatabase
         val contentValues = ContentValues()
         contentValues.put("name", name)
@@ -29,20 +29,18 @@ class DBHelper(val ctx : Context) : SQLiteOpenHelper(ctx,"ContactDB",null,1) {
         contentValues.put("website", website)
         contentValues.put("notes", notes)
         val result = db.insert("ContactDetails", null, contentValues)
-        if (result == -1L) return false
-        else return true
+        return result != -1L
     }
-    fun deletedata(contactId: Int): Boolean? {
-        val DB = this.writableDatabase
-        val cursor = DB.rawQuery("Select * from ContactDetails where id = $contactId", null)
-        if (cursor.count > 0) {
-            val result = DB.delete("ContactDetails", "id=?", arrayOf(contactId.toString())).toLong()
-            if (result == -1L) return false
-            else  return true
-        } else return false
+    fun deletedata(contactId: Int): Boolean{
+        val dataBase = this.writableDatabase
+        val cursor = dataBase.rawQuery("Select * from ContactDetails where id = $contactId", null)
+        return if (cursor.count > 0) {
+            val result = dataBase.delete("ContactDetails", "id=?", arrayOf(contactId.toString())).toLong()
+            result != -1L
+        } else false
     }
     fun updateuserdata(name: String?, number: String?,company: String?,email: String?,contactgroup: String?,
-                       address: String?,nickname: String?,website: String?,notes: String?, id : Int,image : String?): Boolean? {
+                       address: String?,nickname: String?,website: String?,notes: String?, id : Int,image : String?): Boolean {
         val db = this.writableDatabase
         val contentValues = ContentValues()
         contentValues.put("name", name)
@@ -56,19 +54,17 @@ class DBHelper(val ctx : Context) : SQLiteOpenHelper(ctx,"ContactDB",null,1) {
         contentValues.put("website", website)
         contentValues.put("notes", notes)
         val cursor: Cursor =db.rawQuery("Select * from ContactDetails where id = $id",null)
-        if(cursor.count > 0){
-            var result = db.update("ContactDetails",contentValues,"id=?",arrayOf(id.toString()))
-            if (result == -1) return false
-            else return true
-        }
-        else return false
+        return if(cursor.count > 0){
+            val result = db.update("ContactDetails",contentValues,"id=?",arrayOf(id.toString()))
+            result != -1
+        } else false
     }
     fun getdata(): Cursor? {
-        val DB = this.writableDatabase
-        return DB.rawQuery("Select * from ContactDetails as detail order by detail.name Asc ", null)
+        val database = this.writableDatabase
+        return database.rawQuery("Select * from ContactDetails as detail order by detail.name Asc ", null)
     }
     fun getDetailedData(contactId : Int): Cursor? {
-        val DB = this.writableDatabase
-        return DB.rawQuery("Select * from ContactDetails as detail where detail.id = $contactId", null)
+        val database = this.writableDatabase
+        return database.rawQuery("Select * from ContactDetails as detail where detail.id = $contactId", null)
     }
 }

@@ -9,28 +9,25 @@ import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.util.Base64
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.Observer
 import androidx.work.*
 import com.example.contact.model.ContactData
 import com.example.contact.model.DBHelper
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.progreesbar.*
 import java.lang.Exception
-import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.reflect.KProperty
 
  class MainActivity : AppCompatActivity() {
-    var contactList :ArrayList<ContactData> = ArrayList<ContactData>()
+    var contactList :ArrayList<ContactData> = ArrayList()
     val contactDb = DBHelper(this)
     lateinit var dialog : Dialog
+    private lateinit var contactAdapter :ContactAdapter
+    var selectedList :ArrayList<ContactData> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -42,11 +39,11 @@ import kotlin.reflect.KProperty
         topAppBarmain.setOnMenuItemClickListener {
             onOptionsItemSelected(it)
         }
-        create.setOnClickListener(){
-            var intent = Intent(this,CreateContactActivity::class.java)
+        create.setOnClickListener{
+            val intent = Intent(this,CreateContactActivity::class.java)
             startActivity(intent)
         }
-         if(!(ActivityCompat.checkSelfPermission(this,Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED)){
+         if(ActivityCompat.checkSelfPermission(this,Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED){
            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_CONTACTS),55)
         }
 
@@ -66,7 +63,9 @@ import kotlin.reflect.KProperty
             R.id.importfile -> {
                 try{
                     if(ActivityCompat.checkSelfPermission(this,Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED){
-                        createWorker()
+//                        createWorker()
+                        val intent = Intent(this,SelectContactActivity::class.java)
+                        startActivity(intent)
                     }else{
                         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_CONTACTS),56)
                     }
@@ -77,14 +76,20 @@ import kotlin.reflect.KProperty
             }
             R.id.exportfile ->{
                 try{
-                    if(ActivityCompat.checkSelfPermission(this,Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED){
+                    if(ActivityCompat.checkSelfPermission(this,Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
                         writeContact()
                     }else{
-                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_CONTACTS),25)
+                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_CONTACTS,Manifest.permission.WRITE_EXTERNAL_STORAGE),25)
                     }
                 }catch (e : Exception){
                     println(e)
                 }
+            }
+            R.id.Deletefile ->{
+                selectedList = contactAdapter.getSelectedContactList()
+                contactList.clear()
+                DeleteFromDb().execute()
+                ContactTask().execute()
             }
         }
         return true
@@ -97,16 +102,17 @@ import kotlin.reflect.KProperty
          super.onRequestPermissionsResult(requestCode, permissions, grantResults)
          if(requestCode == 56){
              if(ActivityCompat.checkSelfPermission(this,Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED){
-                 createWorker()
+                 val intent = Intent(this,SelectContactActivity::class.java)
+                 startActivity(intent)
              }
          }
          if(requestCode == 25){
-             if(ActivityCompat.checkSelfPermission(this,Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED){
+             if(ActivityCompat.checkSelfPermission(this,Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
                  writeContact()
              }
          }
          if(requestCode == 55){
-             if(!(ActivityCompat.checkSelfPermission(this,Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED)){
+             if(ActivityCompat.checkSelfPermission(this,Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED){
                  Toast.makeText(this,"Permission Denied",Toast.LENGTH_SHORT).show()
              }
              else{
@@ -118,51 +124,47 @@ import kotlin.reflect.KProperty
          super.onPause()
          dialog.dismiss()
      }
-     fun writeContact(){
+     private fun writeContact(){
          Toast.makeText(this,"Export",Toast.LENGTH_SHORT).show()
-         var workManager = WorkManager.getInstance(applicationContext)
+         val workManager = WorkManager.getInstance(applicationContext)
          val import = OneTimeWorkRequest.Builder(ExportContact::class.java).build()
          workManager.enqueue(import)
-         workManager.getWorkInfoByIdLiveData(import.id).observe(this, Observer {
-             if(it.state.name == "SUCCEEDED"){
-                 println("~~~~~~~~~~~~~")
-             }
-         })
      }
-     fun createWorker(){
-         dialog.importdetails.setText("Importing...")
-         dialog.setCancelable(false)
-         dialog.show()
-         var workManager = WorkManager.getInstance(applicationContext)
-         val import = OneTimeWorkRequest.Builder(ImportWorker::class.java).build()
-         workManager.enqueue(import)
-         workManager.getWorkInfoByIdLiveData(import.id).observe(this, Observer {
-             if(it.state.name == "SUCCEEDED"){
-                 contactList.clear()
-                 ContactTask().execute()
-             }
-         })
-     }
+//     fun createWorker(){
+//         dialog.importdetails.setText("Importing...")
+//         dialog.setCancelable(false)
+//         dialog.show()
+//         var workManager = WorkManager.getInstance(applicationContext)
+//         val import = OneTimeWorkRequest.Builder(ImportWorker::class.java).build()
+//         workManager.enqueue(import)
+//         workManager.getWorkInfoByIdLiveData(import.id).observe(this, Observer {
+//             if(it.state.name == "SUCCEEDED"){
+//                 contactList.clear()
+//                 ContactTask().execute()
+//             }
+//         })
+//     }
     fun createAdapter(contact : ArrayList<ContactData>)  {
-        listview.adapter = ContactAdapter(contact)
-    }
+      contactAdapter = ContactAdapter(contact)
+      listview.adapter = contactAdapter
+}
     inner class ContactTask : AsyncTask<Void, Int, Void>() {
-        var cursorTotal = 0
+        private var cursorTotal = 0
         override fun doInBackground(vararg params: Void?): Void? {
-            var cursor: Cursor? = contactDb.getdata()
+            val cursor: Cursor? = contactDb.getdata()
             var count = 0
             cursorTotal = cursor?.count!!
             try{
             if (cursorTotal != 0) {
-                while (cursor?.moveToNext()) {
+                while (cursor.moveToNext()) {
                     if (cursor.getString(3) != null) {
-                        var comressed = Base64.decode(cursor.getString(3), Base64.DEFAULT)
+                        val compressed = Base64.decode(cursor.getString(3), Base64.DEFAULT)
                         contactList.add(
                             ContactData(
                                 cursor.getInt(0),
                                 cursor.getString(1),
                                 cursor.getString(2),
-                                BitmapFactory.decodeByteArray(comressed, 0, comressed.size),
+                                BitmapFactory.decodeByteArray(compressed, 0, compressed.size),
                                 cursor.getString(4),
                                 cursor.getString(5),
                                 cursor.getString(6),
@@ -208,8 +210,24 @@ import kotlin.reflect.KProperty
             dialog.dismiss()
         }
     }
+     inner class DeleteFromDb : AsyncTask<Void, Int, Void>() {
+         override fun doInBackground(vararg params: Void?): Void? {
+             if(selectedList.size > 0){
+                 for(contactData in selectedList){
+                     contactDb.deletedata(contactData.contactId)
+                 }
+             }
+             return null
+         }
+         override fun onPreExecute() {
+             super.onPreExecute()
+             dialog.importdetails.setText("Deleting...")
+             dialog.setCancelable(false)
+             dialog.show()
+         }
+         override fun onPostExecute(result: Void?) {
+             dialog.dismiss()
+         }
+     }
 }
 
- private operator fun Any.setValue(mainActivity: MainActivity, property: KProperty<*>, searchView: SearchView) {
-
- }

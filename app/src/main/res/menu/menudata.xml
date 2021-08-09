@@ -7,4 +7,7 @@
     <item  android:id="@+id/exportfile"
         android:title="Export"
         app:showAsAction="never"/>
+    <item  android:id="@+id/Deletefile"
+        android:title="Delete"
+        app:showAsAction="never"/>
 </menu>
