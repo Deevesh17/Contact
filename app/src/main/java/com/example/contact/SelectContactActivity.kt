@@ -8,9 +8,14 @@ import android.os.Bundle
 import android.util.Base64
 import android.view.Menu
 import android.view.MenuItem
+import android.view.inputmethod.EditorInfo
+import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.Observer
 import com.example.contact.model.ContactData
 import com.example.contact.model.DBHelper
 import com.example.contact.model.ImportData
+import com.example.contact.viewmodel.ContactViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_select_contact.*
 import kotlinx.android.synthetic.main.progreesbar.*
 import java.io.ByteArrayOutputStream
@@ -20,6 +25,7 @@ class SelectContactActivity : AppCompatActivity() {
     private lateinit var contactAdapter :ContactAdapter
     var selectedList :ArrayList<ContactData> = ArrayList<ContactData>()
     val contactDb = DBHelper(this)
+    val title = ContactViewModel(this)
     var contactList :ArrayList<ContactData> = ArrayList<ContactData>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +39,15 @@ class SelectContactActivity : AppCompatActivity() {
         dialog = Dialog(this)
         dialog.setContentView(R.layout.progreesbar)
         ContactTask().execute()
+        title.contactDataLive.observe(this, Observer {
+            if(contactAdapter.selectedCount > 0){
+                topAppBarSelect.title = it
+            }
+            else{
+                topAppBarSelect.title = "Select Contact"
+            }
+        })
+
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menudata,menu)
@@ -41,13 +56,41 @@ class SelectContactActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.selectcontact ->{
-                selectedList = contactAdapter.getSelectedContactList()
+                if(contactAdapter.isSelectAll){
+                    selectedList = contactList
+                }else{
+                    selectedList = contactAdapter.getSelectedContactList()
+                }
                 SaveToDb().execute()
-                onBackPressed()
             }
-            R.id.saveAll ->{
-                selectedList = contactList
-                SaveToDb().execute()
+            R.id.selectAll ->{
+                contactAdapter.isSelectAll =  !contactAdapter.isSelectAll
+                if(!contactAdapter.isSelectAll){
+                    contactAdapter.selectedPosition.clear()
+                    contactAdapter.selectedCount = 0
+                    contactAdapter.removedPosition.clear()
+                    title.setValutodata("Selected(${contactAdapter.selectedCount}/${contactList.size})")
+                }else  {
+                    contactAdapter.selectedCount = contactList.size
+                    title.setValutodata("Selected(${contactAdapter.selectedCount}/${contactList.size})")
+                }
+                contactAdapter.notifyDataSetChanged()
+            }
+            R.id.searchimport ->{
+                val search = topAppBarSelect.menu.findItem(R.id.searchimport)
+                val searchView = search?.actionView as SearchView
+                searchView.imeOptions = EditorInfo.IME_ACTION_DONE
+                searchView.queryHint = "Search Contact"
+                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        return false
+                    }
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        contactAdapter.filter.filter(newText)
+                        contactAdapter.notifyDataSetChanged()
+                        return false
+                    }
+                })
             }
         }
         return true
@@ -103,7 +146,7 @@ class SelectContactActivity : AppCompatActivity() {
         }
     }
     private fun createAdapter(contactList: ArrayList<ContactData>) {
-        contactAdapter = ContactAdapter(contactList)
+        contactAdapter = ContactAdapter(contactList,title)
         selectList.adapter = contactAdapter
     }
 }

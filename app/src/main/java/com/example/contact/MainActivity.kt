@@ -10,13 +10,19 @@ import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Base64
+import androidx.appcompat.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.Observer
 import androidx.work.*
 import com.example.contact.model.ContactData
 import com.example.contact.model.DBHelper
+import com.example.contact.viewmodel.ContactViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.android.synthetic.main.activity_contact_data.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.progreesbar.*
 import java.lang.Exception
@@ -27,7 +33,8 @@ import kotlin.collections.ArrayList
     val contactDb = DBHelper(this)
     lateinit var dialog : Dialog
     private lateinit var contactAdapter :ContactAdapter
-    var selectedList :ArrayList<ContactData> = ArrayList()
+     val title = ContactViewModel(this)
+     var selectedList :ArrayList<ContactData> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -46,12 +53,28 @@ import kotlin.collections.ArrayList
          if(ActivityCompat.checkSelfPermission(this,Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED){
            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_CONTACTS),55)
         }
+        title.contactDataLive.observe(this, Observer {
+            if (contactAdapter.selectedCount > 0){
+                topAppBarmain.title = it
+                topAppBarmain.menu.findItem(R.id.Deletefilemain).isVisible = true
+                topAppBarmain.menu.findItem(R.id.importfile).isVisible = false
+                topAppBarmain.menu.findItem(R.id.selectAllmain).isVisible = true
+                topAppBarmain.menu.findItem(R.id.exportfile).isVisible = true
+
+            }else{
+                topAppBarmain.title = "Contact"
+                topAppBarmain.menu.findItem(R.id.Deletefilemain).isVisible = false
+                topAppBarmain.menu.findItem(R.id.importfile).isVisible = true
+                topAppBarmain.menu.findItem(R.id.selectAllmain).isVisible = false
+                topAppBarmain.menu.findItem(R.id.exportfile).isVisible = false
+            }
+        })
 
     }
      override fun onResume() {
          super.onResume()
          contactList.clear()
-         ContactTask().execute()
+         ContactTask().execute("GetDB")
      }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -85,11 +108,61 @@ import kotlin.collections.ArrayList
                     println(e)
                 }
             }
-            R.id.Deletefile ->{
-                selectedList = contactAdapter.getSelectedContactList()
-                contactList.clear()
-                DeleteFromDb().execute()
-                ContactTask().execute()
+            R.id.Deletefilemain ->{
+                MaterialAlertDialogBuilder(this)
+                    .setTitle("Delete Contacts")
+                    .setMessage("Delete the Selected contacts info from this device?")
+                    .setNeutralButton("Cancel") { dialog, which ->
+                    }
+                    .setPositiveButton("Delete") { dialog, which ->
+                        if(contactAdapter.isSelectAll){
+                            println(contactAdapter.isSelectAll)
+                            selectedList = ArrayList<ContactData>(contactList)
+                        }else{
+                            selectedList = contactAdapter.getSelectedContactList()
+                        }
+                        if(contactAdapter.selectedCount > 0){
+                            contactAdapter.selectedPosition.clear()
+                            contactAdapter.selectedCount = 0
+                            contactAdapter.removedPosition.clear()
+                            title.setValutodata("Selected(${contactAdapter.selectedCount}/${contactList.size})")
+                        }
+                        ContactTask().execute("Delete")
+                        contactList.clear()
+                        ContactTask().execute("GetDB")
+
+                    }
+                    .show()
+
+            }
+            R.id.selectAllmain ->{
+                contactAdapter.isSelectAll =  !contactAdapter.isSelectAll
+                if(!contactAdapter.isSelectAll){
+                    contactAdapter.selectedPosition.clear()
+                    contactAdapter.selectedCount = 0
+                    contactAdapter.removedPosition.clear()
+                    title.setValutodata("Selected(${contactAdapter.selectedCount}/${contactList.size})")
+                }else  {
+                    contactAdapter.selectedCount = contactList.size
+                    title.setValutodata("Selected(${contactAdapter.selectedCount}/${contactList.size})")
+                }
+                contactAdapter.notifyDataSetChanged()
+            }
+            R.id.searchitem ->{
+                val search = topAppBarmain.menu.findItem(R.id.searchitem)
+                val searchView = search?.actionView as SearchView
+                searchView.imeOptions = EditorInfo.IME_ACTION_DONE
+                searchView.queryHint = "Search Contact"
+                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        return false
+                    }
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        contactAdapter.filter.filter(newText)
+                        contactAdapter.notifyDataSetChanged()
+                        return false
+                    }
+                })
             }
         }
         return true
@@ -145,57 +218,70 @@ import kotlin.collections.ArrayList
 //         })
 //     }
     fun createAdapter(contact : ArrayList<ContactData>)  {
-      contactAdapter = ContactAdapter(contact)
+      contactAdapter = ContactAdapter(contact, title)
       listview.adapter = contactAdapter
 }
-    inner class ContactTask : AsyncTask<Void, Int, Void>() {
+    inner class ContactTask : AsyncTask<String, Int, Void>() {
         private var cursorTotal = 0
-        override fun doInBackground(vararg params: Void?): Void? {
-            val cursor: Cursor? = contactDb.getdata()
-            var count = 0
-            cursorTotal = cursor?.count!!
-            try{
-            if (cursorTotal != 0) {
-                while (cursor.moveToNext()) {
-                    if (cursor.getString(3) != null) {
-                        val compressed = Base64.decode(cursor.getString(3), Base64.DEFAULT)
-                        contactList.add(
-                            ContactData(
-                                cursor.getInt(0),
-                                cursor.getString(1),
-                                cursor.getString(2),
-                                BitmapFactory.decodeByteArray(compressed, 0, compressed.size),
-                                cursor.getString(4),
-                                cursor.getString(5),
-                                cursor.getString(6),
-                                cursor.getString(7),
-                                cursor.getString(8),
-                                cursor.getString(9),
-                                cursor.getString(10)
-                            )
-                        )
-                    } else {
-                        contactList.add(ContactData(
-                            cursor.getInt(0),
-                            cursor.getString(1),
-                            cursor.getString(2),
-                            null,
-                            cursor.getString(4),
-                            cursor.getString(5),
-                            cursor.getString(6),
-                            cursor.getString(7),
-                            cursor.getString(8),
-                            cursor.getString(9),
-                            cursor.getString(10)
-                        ))
-                    }
-                    publishProgress(count)
-                    count++
+        var params = ""
+        override fun doInBackground(vararg params: String?): Void? {
+            this.params = params[0].toString()
+            if (params[0] == "GetDB") {
+                val cursor: Cursor? = contactDb.getdata()
+                var count = 0
+                cursorTotal = cursor?.count!!
+                try {
+                    if (cursorTotal != 0) {
+                        while (cursor.moveToNext()) {
+                            if (cursor.getString(3) != null) {
+                                val compressed = Base64.decode(cursor.getString(3), Base64.DEFAULT)
+                                contactList.add(
+                                    ContactData(
+                                        cursor.getInt(0),
+                                        cursor.getString(1),
+                                        cursor.getString(2),
+                                        BitmapFactory.decodeByteArray(compressed,
+                                            0,
+                                            compressed.size),
+                                        cursor.getString(4),
+                                        cursor.getString(5),
+                                        cursor.getString(6),
+                                        cursor.getString(7),
+                                        cursor.getString(8),
+                                        cursor.getString(9),
+                                        cursor.getString(10)
+                                    )
+                                )
+                            } else {
+                                contactList.add(ContactData(
+                                    cursor.getInt(0),
+                                    cursor.getString(1),
+                                    cursor.getString(2),
+                                    null,
+                                    cursor.getString(4),
+                                    cursor.getString(5),
+                                    cursor.getString(6),
+                                    cursor.getString(7),
+                                    cursor.getString(8),
+                                    cursor.getString(9),
+                                    cursor.getString(10)
+                                ))
+                            }
+                            publishProgress(count)
+                            count++
 
+                        }
+                    }
+                } catch (e: Exception) {
+                    println(e)
                 }
             }
-            }catch (e :Exception){
-                println(e)
+            else if (params[0] == "Delete"){
+                if(selectedList.size > 0){
+                    for(contactData in selectedList){
+                        contactDb.deletedata(contactData.contactId)
+                    }
+                }
             }
            return null
         }
@@ -205,29 +291,21 @@ import kotlin.collections.ArrayList
            }
            dialog.importdetails.setText("Importing Contact ${values[0]} of $cursorTotal")
         }
+
+        override fun onPreExecute() {
+            super.onPreExecute()
+            if(params == "Delete") {
+                dialog.importdetails.setText("Deleting...")
+                dialog.setCancelable(false)
+                dialog.show()
+            }
+        }
         override fun onPostExecute(result: Void?) {
-            createAdapter(contactList)
+            if (params == "GetDB") {
+                createAdapter(contactList)
+            }
             dialog.dismiss()
         }
     }
-     inner class DeleteFromDb : AsyncTask<Void, Int, Void>() {
-         override fun doInBackground(vararg params: Void?): Void? {
-             if(selectedList.size > 0){
-                 for(contactData in selectedList){
-                     contactDb.deletedata(contactData.contactId)
-                 }
-             }
-             return null
-         }
-         override fun onPreExecute() {
-             super.onPreExecute()
-             dialog.importdetails.setText("Deleting...")
-             dialog.setCancelable(false)
-             dialog.show()
-         }
-         override fun onPostExecute(result: Void?) {
-             dialog.dismiss()
-         }
-     }
 }
 

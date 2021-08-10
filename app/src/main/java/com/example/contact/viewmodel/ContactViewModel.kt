@@ -7,9 +7,10 @@ import com.example.contact.model.ContactData
 import com.example.contact.model.ImportData
 
 class ContactViewModel(val ctx : Context) : ViewModel() {
-    var contactDataLive : MutableLiveData<ArrayList<ContactData>> = MutableLiveData()
-    private fun importData() : ImportData{
-        return ImportData(ctx)
+    var contactDataLive : MutableLiveData<String> = MutableLiveData()
+    fun setValutodata(title : String):Boolean{
+        contactDataLive.value = title
+        return true
     }
 
 }

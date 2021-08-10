@@ -45,15 +45,22 @@
                 android:layout_marginTop="5dp"
                 android:gravity="left" />
         </LinearLayout>
-
-        <ImageView
-            android:id="@+id/savetodb"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+        <RelativeLayout
+            android:layout_width="65dp"
             android:layout_alignParentRight="true"
-            android:foregroundGravity="center_vertical"
-            android:src="@drawable/ic_action_save"
-            android:visibility="invisible" />
+            android:gravity="center"
+            android:layout_height="65dp">
+
+            <ImageView
+                android:id="@+id/savetodb"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_action_checkcircle"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+
 
 
     </RelativeLayout>
