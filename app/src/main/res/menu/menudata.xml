@@ -5,16 +5,9 @@
         android:title="Import"
         android:icon="@drawable/ic_action_export"
         android:visible="true"
-        app:showAsAction="ifRoom"/>
-    <item  android:id="@+id/searchitem"
-        android:title="Search"
-        android:icon="@drawable/ic_action_search"
-        android:visible="true"
-        app:showAsAction="never|collapseActionView"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
+        app:showAsAction="never"/>
     <item  android:id="@+id/exportfile"
         android:title="Export"
-        android:visible="false"
         android:icon="@drawable/ic_action_export"
         app:showAsAction="never"/>
     <item  android:id="@+id/Deletefilemain"
@@ -26,5 +19,9 @@
         android:title="SelectAll"
         android:visible="false"
         android:icon="@drawable/ic_action_selectall"
+        app:showAsAction="never"/>
+    <item  android:id="@+id/signout"
+        android:title="SignOut"
+        android:visible="true"
         app:showAsAction="never"/>
 </menu>

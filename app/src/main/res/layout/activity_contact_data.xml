@@ -16,7 +16,7 @@
             style="@style/Widget.MaterialComponents.Toolbar.Surface"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#6FEFE3"
+            android:background="@color/ic_launcher_background"
             app:menu="@menu/editdelete"
             app:navigationIcon="@drawable/ic_action_goback"
             app:title="Contact" />

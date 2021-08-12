@@ -9,10 +9,5 @@
         android:title="SelectAll"
         android:icon="@drawable/ic_action_selectall"
         app:showAsAction="ifRoom"/>
-    <item  android:id="@+id/searchimport"
-        android:title="Search"
-        android:icon="@drawable/ic_action_search"
-        android:visible="true"
-        app:showAsAction="never|collapseActionView"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
+
 </menu>

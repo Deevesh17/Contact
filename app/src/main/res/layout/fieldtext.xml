@@ -12,7 +12,7 @@
         app:boxCornerRadiusBottomStart="20dp"
         app:boxCornerRadiusTopEnd="20dp"
         app:boxCornerRadiusTopStart="20dp"
-        app:boxStrokeColor="#6FEFE3"
+        app:boxStrokeColor="@color/ic_launcher_background"
         app:hintTextColor="@color/black">
 
         <com.google.android.material.textfield.TextInputEditText

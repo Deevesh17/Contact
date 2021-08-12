@@ -5,17 +5,16 @@ import android.graphics.Bitmap
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Base64
 import android.view.Menu
 import android.view.MenuItem
-import android.view.inputmethod.EditorInfo
-import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import com.example.contact.model.ContactData
 import com.example.contact.model.DBHelper
 import com.example.contact.model.ImportData
 import com.example.contact.viewmodel.ContactViewModel
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_select_contact.*
 import kotlinx.android.synthetic.main.progreesbar.*
 import java.io.ByteArrayOutputStream
@@ -23,13 +22,15 @@ import java.io.ByteArrayOutputStream
 class SelectContactActivity : AppCompatActivity() {
     lateinit var dialog : Dialog
     private lateinit var contactAdapter :ContactAdapter
-    var selectedList :ArrayList<ContactData> = ArrayList<ContactData>()
+    var selectedList :ArrayList<ContactData> = ArrayList()
     val contactDb = DBHelper(this)
+    var signinUser = ""
     val title = ContactViewModel(this)
-    var contactList :ArrayList<ContactData> = ArrayList<ContactData>()
+    var contactList :ArrayList<ContactData> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_contact)
+        signinUser = intent.getStringExtra("email").toString()
         topAppBarSelect.setNavigationOnClickListener {
             onBackPressed()
         }
@@ -39,6 +40,18 @@ class SelectContactActivity : AppCompatActivity() {
         dialog = Dialog(this)
         dialog.setContentView(R.layout.progreesbar)
         ContactTask().execute()
+        importsearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                contactAdapter.filter.filter(s)
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+        })
         title.contactDataLive.observe(this, Observer {
             if(contactAdapter.selectedCount > 0){
                 topAppBarSelect.title = it
@@ -61,6 +74,9 @@ class SelectContactActivity : AppCompatActivity() {
                 }else{
                     selectedList = contactAdapter.getSelectedContactList()
                 }
+                dialog.importdetails.setText("Saving...")
+                dialog.setCancelable(false)
+                dialog.show()
                 SaveToDb().execute()
             }
             R.id.selectAll ->{
@@ -76,22 +92,7 @@ class SelectContactActivity : AppCompatActivity() {
                 }
                 contactAdapter.notifyDataSetChanged()
             }
-            R.id.searchimport ->{
-                val search = topAppBarSelect.menu.findItem(R.id.searchimport)
-                val searchView = search?.actionView as SearchView
-                searchView.imeOptions = EditorInfo.IME_ACTION_DONE
-                searchView.queryHint = "Search Contact"
-                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                    override fun onQueryTextSubmit(query: String?): Boolean {
-                        return false
-                    }
-                    override fun onQueryTextChange(newText: String?): Boolean {
-                        contactAdapter.filter.filter(newText)
-                        contactAdapter.notifyDataSetChanged()
-                        return false
-                    }
-                })
-            }
+
         }
         return true
     }
@@ -129,16 +130,9 @@ class SelectContactActivity : AppCompatActivity() {
                         var byte = stream.toByteArray()
                         base64image = Base64.encodeToString(byte, Base64.DEFAULT)
                     }
-                    contactDb.insertuserdata(contactData.name,contactData.number,base64image,contactData.company,contactData.email,contactData.contactgroup,contactData.address,contactData.nickname,contactData.website,contactData.notes)
-                }
+                    contactDb.insertuserdata(contactData.name,contactData.number,base64image,contactData.company,contactData.email,contactData.contactgroup,contactData.address,contactData.nickname,contactData.website,contactData.notes,signinUser) }
             }
             return null
-        }
-        override fun onPreExecute() {
-            super.onPreExecute()
-            dialog.importdetails.setText("Importing...")
-            dialog.setCancelable(false)
-            dialog.show()
         }
         override fun onPostExecute(result: Void?) {
             dialog.dismiss()
@@ -146,7 +140,7 @@ class SelectContactActivity : AppCompatActivity() {
         }
     }
     private fun createAdapter(contactList: ArrayList<ContactData>) {
-        contactAdapter = ContactAdapter(contactList,title)
+        contactAdapter = ContactAdapter(contactList,title,signinUser)
         selectList.adapter = contactAdapter
     }
 }

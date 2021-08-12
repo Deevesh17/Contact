@@ -18,9 +18,9 @@ import kotlinx.android.synthetic.main.activity_listdesign.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.coroutines.coroutineContext
-
-class ContactAdapter(val contact : ArrayList<ContactData>,val title : ContactViewModel) : RecyclerView.Adapter<ContactAdapter.ContactViewHolder>(),
+class ContactAdapter(val contact : ArrayList<ContactData>,val title : ContactViewModel,val signinUser : String) : RecyclerView.Adapter<ContactAdapter.ContactViewHolder>(),
     Filterable {
+    var contactIds : ArrayList<String> = ArrayList()
     private var SelectedContact = ArrayList<ContactData>()
     var selectedPosition = ArrayList<Int>()
     var removedPosition = ArrayList<Int>()
@@ -86,6 +86,7 @@ class ContactAdapter(val contact : ArrayList<ContactData>,val title : ContactVie
                         val intent =
                             Intent(holder.itemView.context, ContactDataActivity::class.java)
                         intent.putExtra("contactid", ContactList[position].contactId)
+                        intent.putExtra("email", signinUser)
                         startActivity(holder.itemView.context, intent, null)
                     }
                 }
@@ -124,8 +125,10 @@ class ContactAdapter(val contact : ArrayList<ContactData>,val title : ContactVie
                 }else{
                     val filterpattern = constraint.toString().lowercase()
                     for(Data in searchList){
-                        if (Data.name.lowercase().contains(filterpattern)){
-                            filteredList.add(Data)
+                        for (name in Data.name.split(" ")){
+                            if (name.lowercase().startsWith(filterpattern)){
+                                filteredList.add(Data)
+                            }
                         }
                         for(num in Data.number.split(",")){
                             if(num.lowercase().replace(" ","").contains(filterpattern)){

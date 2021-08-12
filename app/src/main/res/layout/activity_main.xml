@@ -6,39 +6,18 @@
     android:layout_height="match_parent"
     android:background="#001CB68A"
     tools:context=".MainActivity">
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:id="@+id/actionbar"
-        android:layout_height="wrap_content">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBarmain"
-            style="@style/Widget.MaterialComponents.Toolbar.Surface"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#6FEFE3"
-            app:menu="@menu/menudata"
-            app:navigationIcon="@drawable/ic_action_goback"
-            app:title="Contact"
-            app:titleCentered="true" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listview"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/mainfragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/actionbar"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="20dp"
+        android:layout_above="@+id/homenavigation" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/homenavigation"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#6FEFE3"
-        android:src="@drawable/ic_action_pluse"
-        android:id="@+id/create"/>
-
-
+        android:layout_alignParentBottom="true"
+        android:background="?android:windowBackground"
+        app:menu="@menu/bottom_navigation_menu" />
 </RelativeLayout>

@@ -15,7 +15,7 @@
             style="@style/Widget.MaterialComponents.Toolbar.Surface"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#6FEFE3"
+            android:background="@color/ic_launcher_background"
             app:menu="@menu/cretement"
             app:navigationIcon="@drawable/ic_action_cancel"
             app:title="Create Contact"
@@ -56,7 +56,7 @@
                 app:boxCornerRadiusBottomStart="20dp"
                 app:boxCornerRadiusTopEnd="20dp"
                 app:boxCornerRadiusTopStart="20dp"
-                app:boxStrokeColor="#6FEFE3"
+                app:boxStrokeColor="@color/ic_launcher_background"
                 app:hintTextColor="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -77,7 +77,7 @@
                 app:boxCornerRadiusBottomStart="20dp"
                 app:boxCornerRadiusTopEnd="20dp"
                 app:boxCornerRadiusTopStart="20dp"
-                app:boxStrokeColor="#6FEFE3"
+                app:boxStrokeColor="@color/ic_launcher_background"
                 app:hintTextColor="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -97,7 +97,7 @@
                 app:boxCornerRadiusBottomStart="20dp"
                 app:boxCornerRadiusTopEnd="20dp"
                 app:boxCornerRadiusTopStart="20dp"
-                app:boxStrokeColor="#6FEFE3"
+                app:boxStrokeColor="@color/ic_launcher_background"
                 app:hintTextColor="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -118,7 +118,7 @@
                 app:boxCornerRadiusBottomStart="20dp"
                 app:boxCornerRadiusTopEnd="20dp"
                 app:boxCornerRadiusTopStart="20dp"
-                app:boxStrokeColor="#6FEFE3"
+                app:boxStrokeColor="@color/ic_launcher_background"
                 app:hintTextColor="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -140,7 +140,7 @@
                 app:boxCornerRadiusBottomStart="20dp"
                 app:boxCornerRadiusTopEnd="20dp"
                 app:boxCornerRadiusTopStart="20dp"
-                app:boxStrokeColor="#6FEFE3"
+                app:boxStrokeColor="@color/ic_launcher_background"
                 app:hintAnimationEnabled="true"
                 app:hintTextColor="@color/black"
                 app:startIconDrawable="@drawable/ic_action_group">

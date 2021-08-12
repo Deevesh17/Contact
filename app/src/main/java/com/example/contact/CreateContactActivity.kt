@@ -32,6 +32,7 @@ class CreateContactActivity : AppCompatActivity() {
     private var contactId = 0
     private val contactDb = DBHelper(this)
     private var base64image : String? = null
+    var signinuser = ""
     override fun onResume() {
         super.onResume()
         val group = resources.getStringArray(R.array.group)
@@ -42,6 +43,7 @@ class CreateContactActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_contact)
         contactId = intent.getIntExtra("contactid", -1)
+        signinuser = intent.getStringExtra("email").toString()
         if (contactId != -1){
             topAppBarCreate.title = "Update Contact"
         }
@@ -279,7 +281,8 @@ class CreateContactActivity : AppCompatActivity() {
                        address,
                        nickname,
                        website,
-                       notes)
+                       notes,
+                       signinuser)
                    if (result) {
                        onBackPressed()
                    }

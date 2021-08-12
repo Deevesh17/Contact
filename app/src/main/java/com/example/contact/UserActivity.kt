@@ -12,20 +12,6 @@ class UserActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user)
         replaceFragment(SigninActivity())
-        navbar.setOnNavigationItemSelectedListener(object : BottomNavigationView.OnNavigationItemSelectedListener {
-            override fun onNavigationItemSelected(item: MenuItem): Boolean {
-                when(item.itemId){
-                    R.id.siginnav -> {
-                        replaceFragment(SigninActivity())
-                    }
-                    R.id.signupnav -> {
-                        replaceFragment(SignupActivity())
-                    }
-                }
-                return true
-            }
-        })
-
     }
     fun replaceFragment(fragment : Fragment){
         val fragmentManager = supportFragmentManager

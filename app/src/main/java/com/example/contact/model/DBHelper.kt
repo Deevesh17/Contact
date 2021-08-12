@@ -9,13 +9,13 @@ import android.database.sqlite.SQLiteOpenHelper
 
 class DBHelper(ctx : Context) : SQLiteOpenHelper(ctx,"ContactDB",null,1) {
     override fun onCreate(db: SQLiteDatabase?) {
-        db?.execSQL("CREATE TABLE ContactDetails(id  INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,number TEXT,image TEXT,company TEXT,email TEXT,contactgroup TEXT,address TEXT,nickname TEXT,website TEXT,notes TEXT)")
+        db?.execSQL("CREATE TABLE ContactDetails(id  INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,number TEXT,image TEXT,company TEXT,email TEXT,contactgroup TEXT,address TEXT,nickname TEXT,website TEXT,notes TEXT,user Text)")
     }
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db?.execSQL("drop Table if exists ContactDetails")
     }
     fun insertuserdata(name: String?, number: String?, image: String?,company: String?,email: String?,contactgroup: String?,
-                       address: String?,nickname: String?,website: String?,notes: String?): Boolean {
+                       address: String?,nickname: String?,website: String?,notes: String?,user: String?): Boolean {
         val db = this.writableDatabase
         val contentValues = ContentValues()
         contentValues.put("name", name)
@@ -28,6 +28,7 @@ class DBHelper(ctx : Context) : SQLiteOpenHelper(ctx,"ContactDB",null,1) {
         contentValues.put("nickname", nickname)
         contentValues.put("website", website)
         contentValues.put("notes", notes)
+        contentValues.put("user", user)
         val result = db.insert("ContactDetails", null, contentValues)
         return result != -1L
     }
@@ -59,9 +60,9 @@ class DBHelper(ctx : Context) : SQLiteOpenHelper(ctx,"ContactDB",null,1) {
             result != -1
         } else false
     }
-    fun getdata(): Cursor? {
+    fun getdata(username: String?): Cursor? {
         val database = this.writableDatabase
-        return database.rawQuery("Select * from ContactDetails as detail order by detail.name Asc ", null)
+        return database.rawQuery("Select * from ContactDetails  where user = ? order by name Asc ", arrayOf(username))
     }
     fun getDetailedData(contactId : Int): Cursor? {
         val database = this.writableDatabase

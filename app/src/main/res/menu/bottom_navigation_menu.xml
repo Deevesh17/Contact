@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/siginnav"
-        android:icon="@drawable/ic_action_signin"
+        android:id="@+id/homelist"
+        android:icon="@drawable/ic_action_home"
         android:enabled="true"
-        android:title="Sign In"/>
+        android:title="home"/>
     <item
-        android:id="@+id/signupnav"
+        android:id="@+id/settings"
         android:enabled="true"
-        android:icon="@drawable/ic_action_signup"
-        android:title="Sign Up"/>
+        android:icon="@drawable/ic_action_setting"
+        android:title="Settings"/>
 </menu>

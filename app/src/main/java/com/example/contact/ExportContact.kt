@@ -16,13 +16,15 @@ import java.io.ByteArrayOutputStream
 
 class ExportContact(var context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
     private val contactDb = DBHelper(context)
+    var signinUser = ""
     override fun doWork(): Result {
+        signinUser = inputData.getString("email").toString()
         export()
         return Result.success()
     }
     private fun export() {
         val cursorTotal: Int
-        val cursor: Cursor? = contactDb.getdata()
+        val cursor: Cursor? = contactDb.getdata(signinUser)
         cursorTotal = cursor?.count!!
         var count = 0
         if (cursorTotal != 0) {

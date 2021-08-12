@@ -14,9 +14,6 @@ import kotlinx.android.synthetic.main.signup_fragment.view.*
 import java.lang.Exception
 
 class SignupActivity: Fragment(R.layout.signup_fragment) {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -24,6 +21,10 @@ class SignupActivity: Fragment(R.layout.signup_fragment) {
     ): View? {
         var logInDB = context?.let { LogInDB(it) }
         var view = inflater.inflate(R.layout.signup_fragment,container,false)
+        view.loginup.setOnClickListener {
+            var signinFragment = SigninActivity()
+            parentFragmentManager.beginTransaction().replace(R.id.fragment, signinFragment).commit()
+        }
         view.sinupdb.setOnClickListener {
             if(view.signppassword.text.toString().length <=6){
                 context?.let { it1 ->
@@ -38,26 +39,24 @@ class SignupActivity: Fragment(R.layout.signup_fragment) {
             else if(view.signppassword.text.toString().equals(view.confirmpassword.text.toString())){
                 var cursor :Cursor?
                 try{
-                    cursor = logInDB?.getDetailedData(view.namesignup.text.toString())
+                    cursor = logInDB?.getDetailedData(view.emailsignup.text.toString())
                 }catch (e : Exception){
                     cursor = null
                 }
-                println(cursor?.count)
                 if(cursor?.count == 0) {
                     logInDB?.insertuserdata(view.namesignup.text.toString(),
                         view.emailsignup.text.toString(),
-                        view.signppassword.text.toString())
+                        view.signppassword.text.toString(),view.signupMobile.text.toString())
                     context?.let { it1 ->
                         MaterialAlertDialogBuilder(it1)
                             .setTitle("Congrats!!")
                             .setMessage("You are Registered Successfully!!")
                             .setNeutralButton("Okay") { dialog, which ->
                                 var bundle = Bundle()
-                                bundle.putString("userName", view.namesignup.text.toString())
+                                bundle.putString("userName", view.emailsignup.text.toString())
                                 var signinFragment = SigninActivity()
                                 signinFragment.arguments = bundle
-                                fragmentManager?.beginTransaction()
-                                    ?.replace(R.id.fragment, signinFragment)?.commit()
+                                parentFragmentManager.beginTransaction().replace(R.id.fragment, signinFragment).commit()
                             }
                             .show()
                     }
@@ -65,8 +64,13 @@ class SignupActivity: Fragment(R.layout.signup_fragment) {
                     context?.let { it1 ->
                         MaterialAlertDialogBuilder(it1)
                             .setTitle("Alert!!")
-                            .setMessage("User Already Exists")
+                            .setMessage("User Already Exists You can login by clicking Okay")
                             .setNeutralButton("Okay") { dialog, which ->
+                                var bundle = Bundle()
+                                bundle.putString("userName", view.emailsignup.text.toString())
+                                var signinFragment = SigninActivity()
+                                signinFragment.arguments = bundle
+                                parentFragmentManager.beginTransaction().replace(R.id.fragment, signinFragment).commit()
                             }
                             .show()
                     }

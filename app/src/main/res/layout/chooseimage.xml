@@ -4,6 +4,7 @@
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:id="@+id/choosefrom"
+    android:backgroundTint="@color/ic_launcher_background"
     android:background="@drawable/progressbar"
     android:layout_height="match_parent">
     <TextView
