@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/cloud2"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent">
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:id="@+id/actionbar"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/weatherbar"
+            style="@style/Widget.MaterialComponents.Toolbar.Surface"
+            android:layout_width="match_parent"
+            app:menu="@menu/weathermenu"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/ic_launcher_background"
+            app:navigationIcon="@drawable/ic_action_goback"
+            app:title="Weather"
+            app:titleCentered="true" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:gravity="center"
+       android:orientation="horizontal">
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="Search..."
+        android:padding="10dp"
+        app:boxCornerRadiusBottomEnd="20dp"
+        app:boxCornerRadiusBottomStart="20dp"
+        app:boxCornerRadiusTopEnd="20dp"
+        android:id="@+id/searchint"
+        app:boxCornerRadiusTopStart="20dp"
+        app:boxStrokeColor="@color/ic_launcher_background">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/weatherSearchText"
+            android:layout_width="match_parent"
+            android:textColor="@color/white"
+            android:focusableInTouchMode="true"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+       <ImageView
+           android:layout_width="45dp"
+           android:id="@+id/weatherSearch"
+           android:layout_height="45dp"
+           android:src="@drawable/ic_action_weathersea"
+           android:contentDescription="searchbar" />
+   </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_margin="20dp">
+
+        <TextView
+            android:id="@+id/tempC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="50sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/sky"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tempC"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sky"
+            android:id="@+id/air"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text=""
+            android:textColor="@color/white" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_below="@id/air"
+            android:src="@drawable/suncloud2" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

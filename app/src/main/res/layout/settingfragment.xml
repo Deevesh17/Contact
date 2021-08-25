@@ -1,7 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@color/ic_launcher_background"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent">
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:id="@+id/actionbar"
+        android:layout_height="wrap_content">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/settingBar"
+            style="@style/Widget.MaterialComponents.Toolbar.Surface"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/ic_launcher_background"
+            app:navigationIcon="@drawable/ic_action_goback"
+            app:title="Setting"
+            app:titleCentered="true" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        app:cardCornerRadius="20dp"
+        android:id="@+id/aboutcard"
+        android:contextClickable="true"
+        android:layout_height="wrap_content"
+        app:cardUseCompatPadding="true"
+       >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <TextView
+                android:id="@+id/about"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:gravity="left"
+                android:text="About"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/movetoabout"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_margin="20dp"
+                android:src="@drawable/ic_action_forward"
+                android:visibility="visible" />
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        app:cardCornerRadius="20dp"
+        android:contextClickable="true"
+        android:id="@+id/changepasscard"
+        android:layout_height="wrap_content"
+        app:cardUseCompatPadding="true"
+        android:outlineSpotShadowColor="@color/ic_launcher_background"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <TextView
+                android:id="@+id/changepass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="left"
+                android:text="Change Password"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+               android:layout_margin="20dp"
+                android:src="@drawable/ic_action_forward"
+                android:visibility="visible" />
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        app:cardCornerRadius="20dp"
+        android:contextClickable="true"
+        android:layout_height="wrap_content"
+        app:cardUseCompatPadding="true"
+        android:id="@+id/synccard"
+        android:outlineSpotShadowColor="@color/ic_launcher_background"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <TextView
+                android:id="@+id/sync"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="left"
+                android:text="Sync Google"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/googleSync"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_margin="20dp"
+                android:src="@drawable/ic_action_sync"
+                android:visibility="visible" />
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        app:cardCornerRadius="20dp"
+        android:contextClickable="true"
+        android:layout_height="wrap_content"
+        app:cardUseCompatPadding="true"
+        android:id="@+id/outcard"
+        android:outlineSpotShadowColor="@color/ic_launcher_background"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <TextView
+                android:id="@+id/logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:gravity="left"
+                android:text="Logout"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/settingLogout"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_margin="20dp"
+                android:src="@drawable/logoutmobile"
+                android:visibility="visible" />
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+
+</LinearLayout>

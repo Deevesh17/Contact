@@ -20,8 +20,4 @@
         android:visible="false"
         android:icon="@drawable/ic_action_selectall"
         app:showAsAction="never"/>
-    <item  android:id="@+id/signout"
-        android:title="SignOut"
-        android:visible="true"
-        app:showAsAction="never"/>
 </menu>

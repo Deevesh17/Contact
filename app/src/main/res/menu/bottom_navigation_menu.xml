@@ -6,6 +6,11 @@
         android:enabled="true"
         android:title="home"/>
     <item
+        android:id="@+id/weather"
+        android:icon="@drawable/ic_action_weather"
+        android:enabled="true"
+        android:title="Weather"/>
+    <item
         android:id="@+id/settings"
         android:enabled="true"
         android:icon="@drawable/ic_action_setting"
