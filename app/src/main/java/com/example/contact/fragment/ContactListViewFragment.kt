@@ -117,10 +117,9 @@ class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
         contactList.clear()
         title.setDbData("GetDB",selectedList,signinUser,title)
         title.contactList.observe(requireActivity(), Observer {
-            if (it != null){
+            if(it != null){
                 progressDialog.dismiss()
                 contactList = it
-                println(it)
                 createAdapter(it)
             }
         })

@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import java.io.File
 
 
 class DBHelper(ctx : Context) : SQLiteOpenHelper(ctx,"ContactDB",null,1) {
@@ -14,6 +15,7 @@ class DBHelper(ctx : Context) : SQLiteOpenHelper(ctx,"ContactDB",null,1) {
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db?.execSQL("drop Table if exists ContactDetails")
     }
+
     fun insertuserdata(name: String?, number: String?, image: String?,company: String?,email: String?,contactgroup: String?,
                        address: String?,nickname: String?,website: String?,notes: String?,user: String?): Boolean {
         val db = this.writableDatabase
@@ -32,6 +34,12 @@ class DBHelper(ctx : Context) : SQLiteOpenHelper(ctx,"ContactDB",null,1) {
         val result = db.insert("ContactDetails", null, contentValues)
         return result != -1L
     }
+    fun dropDatabase(){
+        val database = this.writableDatabase
+        var databaseFile = File(database.path)
+        databaseFile.delete()
+    }
+
     fun deletedata(contactId: Int): Boolean{
         val dataBase = this.writableDatabase
         val cursor = dataBase.rawQuery("Select * from ContactDetails where id = $contactId", null)

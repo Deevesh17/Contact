@@ -13,6 +13,13 @@ class RecentSearchModel(val context: Context) {
             return null
         }
     }
+    fun reverseList( searchList : ArrayList<String>) : ArrayList<String>{
+        val reversedSearchList = ArrayList<String>()
+        for(district in searchList.reversed()){
+            reversedSearchList.add(district)
+        }
+        return reversedSearchList
+    }
     fun getSeachList(email : String) : ArrayList<String>{
         var cursor = getDataFromDB(email)
         if(cursor != null) {
@@ -22,6 +29,6 @@ class RecentSearchModel(val context: Context) {
                 }
             }
         }
-        return searchList.reversed() as ArrayList<String>
+        return reverseList(searchList)
     }
 }

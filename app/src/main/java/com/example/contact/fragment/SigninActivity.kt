@@ -54,7 +54,7 @@ class SigninActivity : Fragment(R.layout.signin_fragment) {
     ): View? {
 
         //ProgressBar
-        progressDialog = context?.let { Dialog(it) }!!
+        progressDialog = Dialog(requireContext())
         progressDialog.setContentView(R.layout.progreesbar)
 
         val view = inflater.inflate(R.layout.signin_fragment, container, false)
@@ -72,7 +72,7 @@ class SigninActivity : Fragment(R.layout.signin_fragment) {
         view.facebook.setPermissions(listOf("email"))
         view.facebook.registerCallback(callbackManager, object : FacebookCallback<LoginResult?> {
             override fun onSuccess(result: LoginResult?) {
-                returnEmailFacebook()
+//                returnEmailFacebook()
                 progressDialog.importdetails.setText("Logging in...")
                 progressDialog.setCancelable(false)
                 progressDialog.show()
@@ -213,9 +213,9 @@ class SigninActivity : Fragment(R.layout.signin_fragment) {
                 println(e)
             }
         }
-        val parameters = Bundle()
-        parameters.putString("fields", "id,email")
-        request.parameters = parameters
-        request.executeAsync()
+//        val parameters = Bundle()
+//        parameters.putString("fields", "id,email")
+//        request.parameters = parameters
+//        request.executeAsync()
     }
 }

@@ -16,20 +16,27 @@ class CheckPassword(val context: Context){
         }
     }
 
+    fun checkPassword(password: String,confirmPassword: String) : String{
+        if (password.length <= 6) return "Alert!!,Password should contains more then 6 charecter"
+        else{
+            if (!(password.equals(confirmPassword))) {
+                return "Alert!!,Password and Confirm password is not same"
+            }
+        }
+        return "Success"
+    }
 
 //    creating new password and validating the new password and updating to existing record
     fun createNewPassword(email : String,password : String, confirmPassword : String) : String{
-        if(password.length <=6) return "Alert!!,Password should contains more then 6 charecter"
-        else if(password.equals(confirmPassword)){
-        val result = logInDB.updateuserdata(email,password)
-        if(result) return "true"
+        if(checkPassword(password, confirmPassword) == "Success") {
+            val result = logInDB.updateuserdata(email, password)
+            if (result) return "true"
         }
-        return  "Alert!!,Password and Confirm password is not same"
+        return checkPassword(password, confirmPassword)
     }
 
 //    change new password
     fun changeNewPassword(oldPassword : String,email : String,password : String, confirmPassword : String) : String  {
-        println("$oldPassword,$email,$password,$confirmPassword")
         val cursor: Cursor? = getDataFromDB(email)
         var dbPassword = ""
         println(cursor)

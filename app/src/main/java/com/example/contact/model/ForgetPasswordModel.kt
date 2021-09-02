@@ -16,6 +16,12 @@ class ForgetPasswordModel(ctx : Context) {
         }
     }
 
+//    validate email and mobile
+    fun checkMobileNumber(email : String,dbEmail : String,dbMobile : String,mobileNumber: String):String{
+        if (dbEmail.equals(email) && dbMobile.equals(mobileNumber)) return "Success"
+        else return "Alert!!,Email and Mobile Number are not same"
+    }
+
     //  mobile number and email validation and cross checking the mobile number
     fun checkForgetPasswordUser(email: String, mobileNumber: String): String {
         val cursor: Cursor? = getDataFromDB(email)
@@ -28,8 +34,8 @@ class ForgetPasswordModel(ctx : Context) {
                         if (cursor.getString(1) != null) dbEmail = cursor.getString(1)
                         if (cursor.getString(3) != null) dbMobile = cursor.getString(3)
                     }
-                    if (dbEmail.equals(email) && dbMobile.equals(mobileNumber)) return "Success"
-                    else if (!(dbEmail.equals(email) && dbMobile.equals(mobileNumber))) return "Alert!!,Email and Mobile Number are not same"
+                    return checkMobileNumber(email, dbEmail, dbMobile, mobileNumber)
+
                 }
             } else return "Alert!!,User Not Exists you can signup by clicking Okay"
         } catch (e: Exception) {

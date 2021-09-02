@@ -34,7 +34,6 @@ import kotlinx.android.synthetic.main.activity_main.*
                when (item.itemId) {
                    R.id.homelist -> {
                        val listfrag = ContactListViewFragment()
-                       println(signinUser)
                        bundle.putString("email", signinUser)
                        listfrag.arguments = bundle
                        replaceFragment(listfrag)

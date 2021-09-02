@@ -17,28 +17,25 @@ class AboutFragment : Fragment(R.layout.aboutfragment) {
         savedInstanceState: Bundle?
     ): View? {
         val user  = arguments?.get("email").toString()
-
         val view = inflater.inflate(R.layout.aboutfragment,container,false)
         view.aboutBar.setNavigationOnClickListener {
             val settingFragment = SettingFragment()
             val bundle = Bundle()
-            bundle.putString("email", user.toString())
+            bundle.putString("email", user)
             settingFragment.arguments = bundle
             parentFragmentManager.beginTransaction().replace(R.id.mainfragment, settingFragment).commit()
         }
-        var viewmodel = ContactViewModel(requireContext())
+        val viewmodel = ContactViewModel(requireContext())
         viewmodel.setAboutUser(user)
         viewmodel.SaveResult.observe(requireActivity(), Observer {
-            println(it)
             if(it!= null && it != "")
             {
-                var result = it.split(",")
+                val result = it.split(",")
                 view.emailAbout.setText(result[1])
                 view.userNameAbout.setText(result[0])
-                view.mobileAbout.setText(result[2])
+                if (result[2] != "null" && result[2] != "") view.mobileAbout.setText(result[2])
             }
         })
-
         return view
     }
 }

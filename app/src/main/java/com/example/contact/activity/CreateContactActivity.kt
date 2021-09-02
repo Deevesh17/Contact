@@ -8,12 +8,12 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
 import android.view.*
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.setPadding
 import com.example.contact.R
@@ -27,7 +27,6 @@ import kotlinx.android.synthetic.main.chooseimage.*
 import kotlinx.android.synthetic.main.fieldtext.*
 import kotlinx.android.synthetic.main.fieldtext.view.*
 import java.io.ByteArrayOutputStream
-import java.lang.Exception
 
 class CreateContactActivity : AppCompatActivity() {
     private var contactId = 0
@@ -70,7 +69,6 @@ class CreateContactActivity : AppCompatActivity() {
                         var numbercount = 0
                         if(splitedNumber.isNotEmpty()){
                             for(numb in splitedNumber){
-                                println(numb)
                                 if (numbercount == 0) {
                                     personNumber.setText(numb)
                                     numbercount++

@@ -51,16 +51,16 @@ class SignupActivity: Fragment(R.layout.signup_fragment) {
                             .setMessage(resultData[1])
                             .setNeutralButton("Okay") { dialog, which ->
                                 if (resultData[1] == "You are Registered Successfully!!") {
-                                    var bundle = Bundle()
+                                    val bundle = Bundle()
                                     bundle.putString("email", view.emailsignup.text.toString())
-                                    var signinFragment = SigninActivity()
+                                    val signinFragment = SigninActivity()
                                     signinFragment.arguments = bundle
                                     parentFragmentManager.beginTransaction()
                                         .replace(R.id.fragment, signinFragment).commit()
                                 } else if (resultData[1] == "User Already Exists You can login by clicking Okay") {
-                                    var bundle = Bundle()
+                                    val bundle = Bundle()
                                     bundle.putString("email", view.emailsignup.text.toString())
-                                    var signinFragment = SigninActivity()
+                                    val signinFragment = SigninActivity()
                                     signinFragment.arguments = bundle
                                     parentFragmentManager.beginTransaction()
                                         .replace(R.id.fragment, signinFragment).commit()

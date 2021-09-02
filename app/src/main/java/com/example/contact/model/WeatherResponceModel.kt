@@ -23,11 +23,11 @@ class WeatherResponceModel(val ctx :Context) {
     fun getWeather(districName : String,viewModel: ContactViewModel,user :String) {
         val cursor = getDataFromDB(user)
         if(cursor != null){
+            println(cursor.count)
             logInDB.deletesearch(user,districName)
-            logInDB.insertusersearch(user,districName)
+            logInDB.insertWeatherDetails(user,districName)
         }
-        else logInDB.insertusersearch(user,districName)
-
+        else logInDB.insertWeatherDetails(user,districName)
         val weatherService = WeatherClient().getClient()?.create(WeatherService::class.java)
         val dis : Call<District> = weatherService?.getWeather(districName)!!
         dis.enqueue(object  : Callback<District> {

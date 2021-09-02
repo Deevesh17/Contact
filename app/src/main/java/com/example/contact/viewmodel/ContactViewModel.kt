@@ -80,6 +80,12 @@ class ContactViewModel(private val ctx : Context) : ViewModel() {
         searchList.value = response.getSeachList(user)
     }
 
+//    SETDATA FUNCTION FOR RECENT SEARCH
+    fun setGoogleSync(user :String,viewModel: ContactViewModel){
+        val response = GoogleContactSync(ctx,viewModel,user)
+        response.GoogleContacts().execute()
+    }
+
     //  SETDATA FUNCTION FOR ABOUT USER
     fun setAboutUser(user :String){
         val result = AboutUserModel(ctx)

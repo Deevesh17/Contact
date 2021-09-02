@@ -41,8 +41,8 @@ class ContactAdapter(val contact : ArrayList<ContactData>,val title : ContactVie
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
         if(ContactList.size > 0) {
             holder.name.setText(ContactList[position].name)
-            val numberData = ContactList[position].number.split(",")
-            holder.number.setText(numberData[0])
+            val numberData = ContactList[position].number?.split(",")
+            holder.number.setText(numberData?.get(0))
             contactid = ContactList[position].contactId
             if (ContactList[position].profile != null) {
                 holder.profile.setImageBitmap(ContactList[position].profile)
@@ -121,13 +121,13 @@ class ContactAdapter(val contact : ArrayList<ContactData>,val title : ContactVie
                 }else{
                     val filterpattern = constraint.toString().lowercase()
                     for(Data in searchList){
-                        for (name in Data.name.split(" ")){
-                            if (name.lowercase().startsWith(filterpattern)){
+                        for (name in Data.name?.split(" ")!!) {
+                            if (name.lowercase().startsWith(filterpattern)) {
                                 filteredList.add(Data)
                             }
                         }
-                        for(num in Data.number.split(",")){
-                            if(num.lowercase().replace(" ","").contains(filterpattern)){
+                        for (num in Data.number?.split(",")!!) {
+                            if (num.lowercase().replace(" ", "").contains(filterpattern)) {
                                 filteredList.add(Data)
                             }
                         }

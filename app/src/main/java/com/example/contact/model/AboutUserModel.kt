@@ -18,17 +18,13 @@ class AboutUserModel(val context: Context) {
     }
     fun getUserDetails(email : String) : String{
         val cursor: Cursor? = getDataFromDB(email)
-        println(email)
-        println(cursor)
         if(cursor != null) {
-            println(cursor.count)
             if (cursor.count != 0) {
                 while (cursor.moveToNext()) {
                     userData = cursor.getString(0) +","+cursor.getString(1) +","+cursor.getString(3)
                 }
             }
         }
-        println(userData)
         return userData
     }
 }

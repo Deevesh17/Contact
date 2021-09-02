@@ -19,12 +19,9 @@ class LoginPasswordModel(val context : Context) {
     }
 
     fun CreateAccount(email: String){
-        println(email)
         val cursor : Cursor? = getDataFromDB(email)
-        println(cursor)
         val acct = GoogleSignIn.getLastSignedInAccount(context)
         if (cursor?.count == 0) {
-            println(cursor.count)
             if(acct != null) {
                 logInDB.insertuserdata(acct.displayName, acct.email, null, null)
             }
@@ -32,26 +29,34 @@ class LoginPasswordModel(val context : Context) {
         }
     }
 
-    //    Password Validation for login page
-    fun checkLoginPassword(email: String,Originalpassword: String) : String{
+//    password validation
+    fun checkPassword(userPassword : String,dbPassword : String): String {
+        if (dbPassword.equals(userPassword)) return "Congratss!!,Success"
+        else return "Alert!!,Password Not Matched"
+    }
 
-        val cursor : Cursor? = getDataFromDB(email)
-        var passoword = ""
-        try {
-            if(cursor != null) {
-                if (cursor.count != 0) {
-                    while (cursor.moveToNext()) if (cursor.getString(2) != null) passoword = cursor.getString(2)
-                    if (passoword.equals(Originalpassword)) {
-                        return "Congratss!!,Success"
+    //    email Validation for login page
+    fun checkLoginPassword(email: String,Originalpassword: String) : String {
+        println(email)
+        if (email != "") {
+            val cursor: Cursor? = getDataFromDB(email)
+            var passoword = ""
+            try {
+                if (cursor != null) {
+                    if (cursor.count != 0) {
+                        println(cursor.count)
+                        while (cursor.moveToNext()) if (cursor.getString(2) != null) passoword =
+                            cursor.getString(2)
+                        return checkPassword(Originalpassword, passoword)
                     }
-                    else if (passoword != "" && !passoword.equals(Originalpassword)) return "Alert!!,Password Not Matched"
                     return "Alert!!,User Not Exists"
                 }
+            } catch (e: Exception) {
                 return "Alert!!,User Not Exists"
             }
-        }catch (e : Exception){
-            return "Alert!!,User Not Exists"
+            return  "Alert!!,User Not Exists"
         }
         return "Alert!!,User Not Exists"
+
     }
 }
