@@ -44,7 +44,7 @@
             android:id="@+id/weatherSearchText"
             android:layout_width="match_parent"
             android:textColor="@color/white"
-            android:focusableInTouchMode="true"
+            android:inputType="textShortMessage"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -20,13 +20,13 @@
         android:theme="@style/Theme.Contact">
         <activity
             android:name=".activity.UserActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true" />
         <activity
             android:name=".activity.SplashScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -35,7 +35,7 @@
             android:exported="true" />
         <activity android:name=".activity.CreateContactActivity" />
         <activity android:name=".activity.ContactDataActivity" />
-        <activity android:name=".activity.MainActivity"></activity>
+        <activity android:name=".activity.MainActivity" />
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 

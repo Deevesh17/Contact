@@ -18,7 +18,6 @@
         android:text="Welcome"
         android:textColor="@color/white"
         android:textSize="30sp" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:id="@+id/userscroll"
@@ -43,16 +42,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email"
+                android:id="@+id/emailsigninphint"
                 android:padding="10dp"
                 app:boxCornerRadiusBottomEnd="20dp"
                 app:boxCornerRadiusBottomStart="20dp"
                 app:boxCornerRadiusTopEnd="20dp"
                 app:boxCornerRadiusTopStart="20dp"
                 android:textColorHint="@color/black"
-
                 app:boxStrokeColor="@color/ic_launcher_background"
                 app:hintTextColor="@color/black">
-
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/Emaillogin"
                     android:layout_width="match_parent"
@@ -65,13 +63,16 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password"
+                android:hint="@string/password"
                 android:padding="10dp"
+                android:id="@+id/passsignin"
                 android:textColorHint="@color/black"
                 app:boxCornerRadiusBottomEnd="20dp"
                 app:boxCornerRadiusBottomStart="20dp"
                 app:boxCornerRadiusTopEnd="20dp"
                 app:boxCornerRadiusTopStart="20dp"
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/ic_eye_svgrepo_com"
                 app:boxStrokeColor="@color/ic_launcher_background"
                 app:hintTextColor="@color/black">
 
@@ -81,6 +82,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
                     android:textColor="@color/black" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -89,7 +91,7 @@
                 android:gravity="right"
                 android:padding="10dp"
                 android:id="@+id/forgetpass"
-                android:text="foget password?"
+                android:text="@string/forget_password"
                 android:textColor="@color/ic_launcher_background"
                 android:textStyle="bold" />
 
@@ -106,7 +108,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/ic_launcher_background"
-                    android:text="Log in"
+                    android:text="@string/log_in"
                     android:fontFamily="serif"
                     android:textColor="@color/black" />
 
@@ -117,12 +119,12 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="serif"
                     android:backgroundTint="@color/ic_launcher_background"
-                    android:text="Sign Up"
+                    android:text="@string/sign_up"
                     android:textColor="@color/black" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="..or.."
+                    android:text="@string/or"
                     android:textSize="20sp"/>
             </LinearLayout>
             <LinearLayout

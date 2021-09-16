@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sidebarnav"
+    app:startDestination="@id/contactListViewFragment">
+
+    <fragment
+        android:id="@+id/contactListViewFragment"
+        android:name="com.example.contact.fragment.ContactListViewFragment"
+        android:label="ContactListViewFragment" >
+        <action
+            android:id="@+id/action_contactListViewFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
+        <action
+            android:id="@+id/action_contactListViewFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.example.contact.fragment.AboutFragment"
+        android:label="AboutFragment" >
+        <action
+            android:id="@+id/action_aboutFragment_to_contactListViewFragment"
+            app:destination="@id/contactListViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.example.contact.fragment.ChangePasswordFragment"
+        android:label="ChangePasswordFragment" >
+        <action
+            android:id="@+id/action_changePasswordFragment_to_contactListViewFragment"
+            app:destination="@id/contactListViewFragment" />
+    </fragment>
+</navigation>

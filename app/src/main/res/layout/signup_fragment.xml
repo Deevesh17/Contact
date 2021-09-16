@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:fontFamily="serif"
         android:gravity="left"
@@ -25,18 +25,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/register"
-        android:background="@drawable/screendesign">
+        android:background="@drawable/screendesign">/
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:orientation="vertical">
+
             <ImageView
-                android:layout_gravity="center"
                 android:layout_width="250dp"
                 android:layout_height="150dp"
-                android:src="@drawable/signupimage"/>
+                android:layout_gravity="center"
+                android:src="@drawable/signupimage" />
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -60,6 +61,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/emailsignuphint"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -86,6 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Mobile"
+                android:id="@+id/mobileHint"
                 android:padding="10dp"
                 android:textColorHint="@color/black"
                 app:boxCornerRadiusBottomEnd="20dp"
@@ -116,6 +119,7 @@
                 app:boxCornerRadiusTopEnd="20dp"
                 app:boxCornerRadiusTopStart="20dp"
                 app:boxStrokeColor="@color/ic_launcher_background"
+                app:endIconMode="password_toggle"
                 app:hintTextColor="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -139,6 +143,7 @@
                 app:boxCornerRadiusTopEnd="20dp"
                 app:boxCornerRadiusTopStart="20dp"
                 app:boxStrokeColor="@color/ic_launcher_background"
+                app:endIconMode="password_toggle"
                 app:hintTextColor="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText

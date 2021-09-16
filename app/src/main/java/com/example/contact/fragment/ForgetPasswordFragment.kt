@@ -1,5 +1,7 @@
 package com.example.contact.fragment
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +9,6 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import com.example.contact.R
-import com.example.contact.model.LogInDB
 import com.example.contact.viewmodel.ContactViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.forgetpasswordfragment.view.*
@@ -19,9 +20,11 @@ class ForgetPasswordFragment : Fragment(R.layout.forgetpasswordfragment) {
         savedInstanceState: Bundle?
     ): View? {
 
-        var logInDB = context?.let { LogInDB(it) }
 
-        var view = inflater.inflate(R.layout.forgetpasswordfragment, container, false)
+        var sharedPreferences: SharedPreferences = requireActivity().getSharedPreferences("com.example.contact.user",
+            Context.MODE_PRIVATE)
+
+        val view = inflater.inflate(R.layout.forgetpasswordfragment, container, false)
 
 //        Annimation
         val topAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.topanimation)
@@ -29,11 +32,11 @@ class ForgetPasswordFragment : Fragment(R.layout.forgetpasswordfragment) {
         view.forgetTitle.animation = topAnimation
         view.forgetScroll.animation = bottomAnimation
 
-        view.Emailforget.setText(arguments?.getString("email"))
+        view.Emailforget.setText(sharedPreferences.getString("email",""))
 
 //        back to login
         view.backtologin.setOnClickListener {
-            var signinFragment = SigninActivity()
+            val signinFragment = SigninActivity()
             parentFragmentManager.beginTransaction().replace(R.id.fragment, signinFragment).commit()
         }
 
@@ -46,9 +49,6 @@ class ForgetPasswordFragment : Fragment(R.layout.forgetpasswordfragment) {
                     val resultData = it.split(",")
                     if( resultData[0] == "Success"){
                         val createPass = CreatePassworFragment()
-                        val bundle = Bundle()
-                        bundle.putString("email", view.Emailforget.text.toString())
-                        createPass.arguments = bundle
                         parentFragmentManager.beginTransaction().replace(R.id.fragment, createPass)
                             .commit()
                     }

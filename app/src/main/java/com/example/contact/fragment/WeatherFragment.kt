@@ -1,5 +1,7 @@
 package com.example.contact.fragment
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -12,19 +14,28 @@ import com.example.contact.viewmodel.ContactViewModel
 import kotlinx.android.synthetic.main.weatherfragment.view.*
 
 class WeatherFragment : Fragment(R.layout.weatherfragment) {
-    lateinit var user : String
+    var user : String? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        user = arguments?.get("email") as String
+
+        lateinit var sharedPreferences: SharedPreferences
+
+        sharedPreferences = requireActivity().getSharedPreferences("com.example.contact.user",
+            Context.MODE_PRIVATE)
+
+        user = sharedPreferences.getString("email","")
         val view = inflater.inflate(R.layout.weatherfragment,container,false)
+
+
         val viewModel = ContactViewModel(requireContext())
 
 //        navigation button handle in Tolbar
         view.weatherbar.setNavigationOnClickListener {
-            requireActivity().onBackPressed()
+            val listfrag = ContactListViewFragment()
+            parentFragmentManager.beginTransaction().replace(R.id.mainfragment, listfrag).commit()
         }
 
 //        Menu details available in toolbar
@@ -33,10 +44,13 @@ class WeatherFragment : Fragment(R.layout.weatherfragment) {
         }
 
         view.weatherSearch.setOnClickListener {
-            user.let { it1 ->
+
+            user?.let { it1 ->
                 viewModel.setWeatherrResopnse(view.weatherSearchText.text.toString(),viewModel,
-                    it1)
+                    it1
+                )
             }
+
         }
         viewModel.weatherResponce.observe(requireActivity(), Observer {
             if(it != null && it != ""){
@@ -54,9 +68,6 @@ class WeatherFragment : Fragment(R.layout.weatherfragment) {
            R.id.recent ->
            {
                val recent = RecentSearchFragment()
-               val bundle = Bundle()
-               bundle.putString("email" ,user)
-               recent.arguments = bundle
                parentFragmentManager.beginTransaction().replace(R.id.mainfragment,recent).commit()
            }
         }

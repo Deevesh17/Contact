@@ -1,5 +1,7 @@
 package com.example.contact.fragment
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +24,12 @@ class ChangePasswordFragment : Fragment(R.layout.changepasswordfragment) {
         savedInstanceState: Bundle?
     ): View? {
 
-        val user : String? = arguments?.get("email") as String?
+        lateinit var sharedPreferences: SharedPreferences
+
+        sharedPreferences = requireActivity().getSharedPreferences("com.example.contact.user",
+            Context.MODE_PRIVATE)
+
+        val user : String? = sharedPreferences.getString("email","")
 
         val view = inflater.inflate(R.layout.changepasswordfragment,container,false)
 
@@ -53,7 +60,7 @@ class ChangePasswordFragment : Fragment(R.layout.changepasswordfragment) {
                                 "Password Successfully changed",
                                 Toast.LENGTH_SHORT)
                                 .show()
-                            var setting = SettingFragment()
+                            val setting = SettingFragment()
                             val bundle = Bundle()
                             bundle.putString("email",user)
                             parentFragmentManager.beginTransaction()

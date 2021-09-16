@@ -2,7 +2,9 @@ package com.example.contact.fragment
 
 import android.Manifest
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.Editable
@@ -15,6 +17,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
@@ -37,8 +40,9 @@ class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
     lateinit var listView : RecyclerView
     lateinit var title : ContactViewModel
     var selectedList :ArrayList<ContactData> = ArrayList()
-    var signinUser = ""
-    private lateinit var contactAdapter : ContactAdapter
+    var signinUser : String? = null
+    lateinit var sharedPreferences: SharedPreferences
+    lateinit var contactAdapter : ContactAdapter
     lateinit var progressDialog : Dialog
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,9 +50,27 @@ class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
         savedInstanceState: Bundle?
     ): View? {
 
+
+        sharedPreferences = requireActivity().getSharedPreferences("com.example.contact.user",
+            Context.MODE_PRIVATE)
+
         val view = inflater.inflate(R.layout.contactlistviewfragment,container,false)
         listView = view.listview
-
+        view.navigationhome.background = null
+        view.navigationhome.menu.getItem(1).isEnabled = false
+        view.navigationhome.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.contact -> {
+                    val listfrag = ContactListViewFragment()
+                    parentFragmentManager.beginTransaction().replace(R.id.mainfragment, listfrag).commit()
+                }
+                R.id.weather ->{
+                    val weather = WeatherFragment()
+                    parentFragmentManager.beginTransaction().replace(R.id.mainfragment, weather).commit()
+                }
+            }
+            true
+        }
         contactDb = DBHelper(requireContext())
         title = ContactViewModel((requireContext()))
 
@@ -56,7 +78,7 @@ class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
         progressDialog = Dialog(requireContext())
         progressDialog.setContentView(R.layout.progreesbar)
 
-        signinUser = arguments?.getString("email").toString()
+        signinUser = sharedPreferences.getString("email","")
 
 //        navigation button handle in Tolbar
         view.topAppBarmain.setNavigationOnClickListener {
@@ -115,7 +137,7 @@ class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
     override fun onResume() {
         super.onResume()
         contactList.clear()
-        title.setDbData("GetDB",selectedList,signinUser,title)
+        signinUser?.let { title.setDbData("GetDB",selectedList, it,title) }
         title.contactList.observe(requireActivity(), Observer {
             if(it != null){
                 progressDialog.dismiss()
@@ -170,8 +192,7 @@ class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
                             contactAdapter.removedPosition.clear()
                             title.setValutodata("Selected(${contactAdapter.selectedCount}/${contactList.size})")
                         }
-                        title.setDbData("Delete",selectedList,signinUser,title)
-                        title.setDbData("GetDB",selectedList,signinUser,title)
+                        signinUser?.let { title.setDbData("Delete",selectedList, it,title) }
 
                     }
                     .show()
@@ -234,7 +255,10 @@ class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
     }
 
     fun createAdapter(contact : ArrayList<ContactData>)  {
-        contactAdapter = ContactAdapter(contact, title,signinUser)
+        contactAdapter = signinUser?.let { ContactAdapter(contact, title, it) }!!
+        val layoutManager = LinearLayoutManager(requireContext())
+        layoutManager.orientation = LinearLayoutManager.VERTICAL
+        listView.layoutManager = layoutManager
         listView.adapter = contactAdapter
     }
 

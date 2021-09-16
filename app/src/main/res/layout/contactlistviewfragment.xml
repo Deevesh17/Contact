@@ -6,29 +6,12 @@
     android:layout_height="match_parent"
     android:background="#001CB68A"
     tools:context=".activity.MainActivity">
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:id="@+id/actionbar"
-        android:layout_height="wrap_content">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBarmain"
-            style="@style/Widget.MaterialComponents.Toolbar.Surface"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/ic_launcher_background"
-            app:menu="@menu/menudata"
-            app:navigationIcon="@drawable/ic_action_goback"
-            app:title="Contact"
-            app:titleCentered="true" />
-
-    </com.google.android.material.appbar.AppBarLayout>
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/actionbar"
-        android:hint="Search..."
+        android:hint="@string/search"
         android:padding="10dp"
         app:boxCornerRadiusBottomEnd="20dp"
         app:boxCornerRadiusBottomStart="20dp"
@@ -37,7 +20,6 @@
         app:boxCornerRadiusTopStart="20dp"
         app:startIconDrawable="@drawable/ic_action_search"
         app:boxStrokeColor="@color/ic_launcher_background">
-
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/searchfromlist"
             android:layout_width="match_parent"
@@ -48,24 +30,42 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/searchint"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/create"
-        android:layout_width="wrap_content"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:backgroundTint="@color/ic_launcher_background"
-        android:src="@drawable/ic_action_pluse" />
+        android:layout_alignParentBottom="true">
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/homenavigation"
+            android:layout_margin="20dp"
+            android:backgroundTint="@color/ic_launcher_background"
+            android:src="@drawable/ic_action_pluse"
+            app:layout_anchor="@id/homenavigation" />
 
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/homenavigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:fabCradleMargin="20dp"
+            app:fabCradleRoundedCornerRadius="10dp"
+            android:background="?android:windowBackground"
+            app:fabCradleVerticalOffset="10dp">
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:layout_width="match_parent"
+                android:id="@+id/navigationhome"
+                android:background="@android:color/transparent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="16dp"
+                app:menu="@menu/bottom_navigation_menu"
+                android:layout_marginRight="16dp" />
+        </com.google.android.material.bottomappbar.BottomAppBar>
 
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </RelativeLayout>

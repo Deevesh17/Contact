@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn = "navigation_view">
+    <item android:title="@string/profile">
+        <menu>
+            <item
+                android:id="@+id/aboutnav"
+                android:icon="@drawable/ic_eye_svgrepo_com"
+                android:title="@string/about" />
+
+            <item
+                android:id="@+id/navchange"
+                android:icon="@drawable/loginimage"
+                android:title="@string/change_password" />
+
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/logoutmobile"
+                android:title="@string/logout" />
+        </menu>
+    </item>
+    <item android:title="@string/google">
+        <menu>
+            <item
+                android:id="@+id/sync"
+                android:icon="@drawable/ic_action_sync"
+                android:title="@string/google_sync" />
+        </menu>
+    </item>
+
+  </menu>

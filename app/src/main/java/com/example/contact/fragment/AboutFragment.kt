@@ -1,5 +1,7 @@
 package com.example.contact.fragment
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,22 +13,23 @@ import com.example.contact.viewmodel.ContactViewModel
 import kotlinx.android.synthetic.main.aboutfragment.view.*
 
 class AboutFragment : Fragment(R.layout.aboutfragment) {
+    lateinit var sharedPreferences: SharedPreferences
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val user  = arguments?.get("email").toString()
+
+        sharedPreferences = requireActivity().getSharedPreferences("com.example.contact.user",
+            Context.MODE_PRIVATE)
+        val user :String? = sharedPreferences.getString("email","")
         val view = inflater.inflate(R.layout.aboutfragment,container,false)
         view.aboutBar.setNavigationOnClickListener {
             val settingFragment = SettingFragment()
-            val bundle = Bundle()
-            bundle.putString("email", user)
-            settingFragment.arguments = bundle
             parentFragmentManager.beginTransaction().replace(R.id.mainfragment, settingFragment).commit()
         }
         val viewmodel = ContactViewModel(requireContext())
-        viewmodel.setAboutUser(user)
+        user?.let { viewmodel.setAboutUser(it) }
         viewmodel.SaveResult.observe(requireActivity(), Observer {
             if(it!= null && it != "")
             {

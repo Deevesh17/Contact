@@ -1,6 +1,8 @@
 package com.example.contact.activity
 
 import android.app.Dialog
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -21,14 +23,19 @@ class SelectContactActivity : AppCompatActivity() {
     private lateinit var contactAdapter : ContactAdapter
     var selectedList :ArrayList<ContactData> = ArrayList()
     val contactDb = DBHelper(this)
-    var signinUser = ""
+    var signinUser : String? = null
+    lateinit var sharedPreferences: SharedPreferences
     val title = ContactViewModel(this)
     var contactList :ArrayList<ContactData> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_contact)
 
-        signinUser = intent.getStringExtra("email").toString()
+
+        sharedPreferences = this.getSharedPreferences("com.example.contact.user",
+            Context.MODE_PRIVATE)
+
+        signinUser = sharedPreferences.getString("email","")
 
         topAppBarSelect.setNavigationOnClickListener {
             onBackPressed()
@@ -45,7 +52,7 @@ class SelectContactActivity : AppCompatActivity() {
         dialog.show()
 
 //        observer the import state from the local contact
-        title.setImportData(title,"Import",selectedList,signinUser)
+        signinUser?.let { title.setImportData(title,"Import",selectedList, it) }
         title.contactList.observe(this, Observer {
             dialog.dismiss()
             contactList = it
@@ -97,7 +104,7 @@ class SelectContactActivity : AppCompatActivity() {
                 dialog.importdetails.setText("Saving...")
                 dialog.setCancelable(false)
                 dialog.show()
-                title.setImportData(title,"Save",selectedList,signinUser)
+                signinUser?.let { title.setImportData(title,"Save",selectedList, it) }
             }
             R.id.selectAll ->{
                 contactAdapter.isSelectAll =  !contactAdapter.isSelectAll
@@ -121,7 +128,7 @@ class SelectContactActivity : AppCompatActivity() {
         dialog.dismiss()
     }
     private fun createAdapter(contactList: ArrayList<ContactData>) {
-        contactAdapter = ContactAdapter(contactList,title,signinUser)
+        contactAdapter = signinUser?.let { ContactAdapter(contactList,title, it) }!!
         selectList.adapter = contactAdapter
     }
 }

@@ -1,7 +1,9 @@
 package com.example.contact.activity
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -19,6 +21,7 @@ import androidx.core.view.setPadding
 import com.example.contact.R
 import com.example.contact.model.DBHelper
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.activity_create_contact.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.additional_field.*
@@ -26,13 +29,17 @@ import kotlinx.android.synthetic.main.additional_field.view.*
 import kotlinx.android.synthetic.main.chooseimage.*
 import kotlinx.android.synthetic.main.fieldtext.*
 import kotlinx.android.synthetic.main.fieldtext.view.*
+import kotlinx.android.synthetic.main.signup_fragment.view.*
 import java.io.ByteArrayOutputStream
+import java.util.regex.Pattern
 
 class CreateContactActivity : AppCompatActivity() {
     private var contactId = 0
     private val contactDb = DBHelper(this)
     private var base64image : String? = null
-    var signinuser = ""
+    var signinuser : String? = null
+    val emailValidationPattern by lazy { "^[a-z][a-z0-9.]{5,30}@[a-z]+[.a-z]+\$+" }
+    val mobileNumberPattern by lazy { "(((0)?|(\\+[0-9]{0,3})){0,4}([ -]*)(([0-9]{5,15})\$))|(([0][0-9]{3,5}[ -]*[0-9]{6}))" }
     override fun onResume() {
         super.onResume()
         val group = resources.getStringArray(R.array.group)
@@ -43,7 +50,10 @@ class CreateContactActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_contact)
         contactId = intent.getIntExtra("contactid", -1)
-        signinuser = intent.getStringExtra("email").toString()
+        lateinit var sharedPreferences: SharedPreferences
+        sharedPreferences = this.getSharedPreferences("com.example.contact.user",
+            Context.MODE_PRIVATE)
+        signinuser = sharedPreferences.getString("email","")
         if (contactId != -1){
             topAppBarCreate.title = "Update Contact"
         }
@@ -178,6 +188,14 @@ class CreateContactActivity : AppCompatActivity() {
     private fun addAdditionalField(view :View){
         dynamicfield.addView(view)
     }
+    fun checkEmail(email : String) : Boolean{
+        if(Pattern.matches(emailValidationPattern,email)) return true
+        return false
+    }
+    fun checkMobileNumber(mobileNumber : String) : Boolean{
+        if(Pattern.matches(mobileNumberPattern,mobileNumber)) return true
+        return false
+    }
     private fun imagebottomitem(){
         val cooseimage = Dialog(this)
         cooseimage.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -249,59 +267,103 @@ class CreateContactActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menudata,menu)
         return true
     }
+    fun validateMoblieNumbers(mobile : String) : Boolean{
+        val numbers = mobile.split(',')
+        for(number in numbers){
+            if(!(checkMobileNumber(number)))
+                return false
+        }
+        return true
+    }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-           R.id.save ->{
-               val childcnt = dynamicfield.childCount
-               var address :String?= null
-               var nickname:String? = null
-               var website :String? = null
-               var notes :String? = null
-               var mobile :String = personNumber.text.toString()
-               for(index in 0..childcnt){
-                   if(dynamicfield.getChildAt(index) != null){
-                       when(dynamicfield.getChildAt(index).additionalhint.hint){
-                           "Address" -> address = dynamicfield.getChildAt(index).additionaltext.text.toString()
-                           "Notes" -> notes = dynamicfield.getChildAt(index).additionaltext.text.toString()
-                           "NickName" -> nickname = dynamicfield.getChildAt(index).additionaltext.text.toString()
-                           "Website" -> website = dynamicfield.getChildAt(index).additionaltext.text.toString()
-                           "Mobile" -> {
-                               mobile += ",${dynamicfield.getChildAt(index).additionaltext.text.toString()}"
+           R.id.save -> {
+
+               if (checkEmail(email.text.toString())) {
+                   val childcnt = dynamicfield.childCount
+                   var address: String? = null
+                   var nickname: String? = null
+                   var website: String? = null
+                   var notes: String? = null
+                   var mobile: String = personNumber.text.toString()
+                   for (index in 0..childcnt) {
+                       if (dynamicfield.getChildAt(index) != null) {
+                           when (dynamicfield.getChildAt(index).additionalhint.hint) {
+                               "Address" -> address =
+                                   dynamicfield.getChildAt(index).additionaltext.text.toString()
+                               "Notes" -> notes =
+                                   dynamicfield.getChildAt(index).additionaltext.text.toString()
+                               "NickName" -> nickname =
+                                   dynamicfield.getChildAt(index).additionaltext.text.toString()
+                               "Website" -> website =
+                                   dynamicfield.getChildAt(index).additionaltext.text.toString()
+                               "Mobile" -> {
+                                   mobile += ",${dynamicfield.getChildAt(index).additionaltext.text.toString()}"
+                               }
                            }
                        }
                    }
-               }
-               if(contactId == -1 ) {
-                   val result: Boolean = contactDb.insertuserdata(personName.text.toString(),
-                       mobile,
-                       base64image,
-                       company.text.toString(),
-                       email.text.toString(),
-                       selectgroup.text.toString(),
-                       address,
-                       nickname,
-                       website,
-                       notes,
-                       signinuser)
-                   if (result) {
-                       onBackPressed()
+                   if(validateMoblieNumbers(mobile)) {
+                       if (contactId == -1) {
+                           val result: Boolean = contactDb.insertuserdata(
+                               personName.text.toString(),
+                               mobile,
+                               base64image,
+                               company.text.toString(),
+                               email.text.toString(),
+                               selectgroup.text.toString(),
+                               address,
+                               nickname,
+                               website,
+                               notes,
+                               signinuser
+                           )
+                           if (result) {
+                               onBackPressed()
+                           }
+                       } else {
+                           val result: Boolean = contactDb.updateuserdata(
+                               personName.text.toString(),
+                               mobile,
+                               company.text.toString(),
+                               email.text.toString(),
+                               selectgroup.text.toString(),
+                               address,
+                               nickname,
+                               website,
+                               notes,
+                               contactId,
+                               base64image
+                           )
+                           if (result) {
+                               onBackPressed()
+                           }
+                       }
                    }
-               }else{
-                   val result : Boolean = contactDb.updateuserdata(
-                       personName.text.toString(),
-                       mobile,
-                       company.text.toString(),
-                       email.text.toString(),
-                       selectgroup.text.toString(),
-                       address,
-                       nickname,
-                       website,
-                       notes,
-                       contactId,
-                       base64image
-                   )
-                   if(result){
-                       onBackPressed()
+                   else
+                   {
+                       this.let { it1 ->
+                           MaterialAlertDialogBuilder(it1)
+                               .setTitle("Alert!!")
+                               .setMessage("Enter valid Mobile Number")
+                               .setNeutralButton("Okay") { dialog, which ->
+
+                               }
+                               .setNegativeButton("Cancel") { dialog, which -> }
+                               .show()
+                       }
+                   }
+               }
+               else{
+                   this.let { it1 ->
+                       MaterialAlertDialogBuilder(it1)
+                           .setTitle("Alert!!")
+                           .setMessage("Enter valid Email Address")
+                           .setNeutralButton("Okay") { dialog, which ->
+
+                           }
+                           .setNegativeButton("Cancel") { dialog, which -> }
+                           .show()
                    }
                }
            }

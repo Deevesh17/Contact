@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.contact.model.*
+import java.util.*
 
 class ContactViewModel(private val ctx : Context) : ViewModel() {
     private val checkPassword: CheckPassword = CheckPassword(ctx)
@@ -13,7 +14,7 @@ class ContactViewModel(private val ctx : Context) : ViewModel() {
     var weatherResponce: MutableLiveData<String> = MutableLiveData<String>()
     var searchList: MutableLiveData<ArrayList<String>> = MutableLiveData<ArrayList<String>>()
     var contactList: MutableLiveData<ArrayList<ContactData>> = MutableLiveData()
-
+    var deleteResult : MutableLiveData<Int> = MutableLiveData()
     fun setValutodata(title : String):Boolean{
         contactDataLive.value = title
         return true
@@ -59,7 +60,7 @@ class ContactViewModel(private val ctx : Context) : ViewModel() {
 //    SETDATA FUNCTION OF GET DATA FROM DB
     fun setDbData(type : String, selectedList :ArrayList<ContactData>, signinUser : String,title: ContactViewModel){
         val contact = ContactdataRetrival(type,selectedList,signinUser,ctx,title)
-        contact.ContactTask().execute(type)
+        contact.getAndDeleteContactFromDB()
     }
 
 //    SETDATA FUNCTION FOR SELECT CONTACT ACTIVITY
@@ -83,7 +84,7 @@ class ContactViewModel(private val ctx : Context) : ViewModel() {
 //    SETDATA FUNCTION FOR RECENT SEARCH
     fun setGoogleSync(user :String,viewModel: ContactViewModel){
         val response = GoogleContactSync(ctx,viewModel,user)
-        response.GoogleContacts().execute()
+        response.GoogleContacts().execute("Sync")
     }
 
     //  SETDATA FUNCTION FOR ABOUT USER
@@ -91,5 +92,12 @@ class ContactViewModel(private val ctx : Context) : ViewModel() {
         val result = AboutUserModel(ctx)
         SaveResult.value = result.getUserDetails(user)
     }
+
+//    Deleting all the user data
+
+//    fun setDeleteResult(){
+//        val result = DeleteUserDetails(ctx)
+//        deleteResult.value = result.deleteContactFromDB()
+//    }
 
 }
