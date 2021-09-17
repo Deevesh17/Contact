@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,6 +32,7 @@ import com.example.contact.model.DBHelper
 import com.example.contact.viewmodel.ContactViewModel
 import com.example.contact.worker.ExportContact
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.contactlistviewfragment.view.*
 import kotlinx.android.synthetic.main.progreesbar.*
 
@@ -50,46 +52,57 @@ class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
         savedInstanceState: Bundle?
     ): View? {
 
-
         sharedPreferences = requireActivity().getSharedPreferences("com.example.contact.user",
             Context.MODE_PRIVATE)
 
+
         val view = inflater.inflate(R.layout.contactlistviewfragment,container,false)
         listView = view.listview
-        view.navigationhome.background = null
-        view.navigationhome.menu.getItem(1).isEnabled = false
-        view.navigationhome.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.contact -> {
-                    val listfrag = ContactListViewFragment()
-                    parentFragmentManager.beginTransaction().replace(R.id.mainfragment, listfrag).commit()
-                }
-                R.id.weather ->{
-                    val weather = WeatherFragment()
-                    parentFragmentManager.beginTransaction().replace(R.id.mainfragment, weather).commit()
-                }
-            }
-            true
-        }
+
         contactDb = DBHelper(requireContext())
         title = ContactViewModel((requireContext()))
 
-//        progress bar initialization
+        requireActivity().topAppBarmain.menu.findItem(R.id.Deletefilemain).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.importfile).isVisible = true
+        requireActivity().topAppBarmain.menu.findItem(R.id.selectAllmain).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.exportfile).isVisible = true
+        requireActivity().topAppBarmain.menu.findItem(R.id.recent).isVisible = false
+        requireActivity().topAppBarmain.title = "Contact"
+        requireActivity().topAppBarmain.setNavigationIcon(R.drawable.ic_action_menu)
+
+
+        requireActivity().topAppBarmain.setNavigationOnClickListener {
+            requireActivity().maindrawable.openDrawer(GravityCompat.START)
+        }
+
+//      progress bar initialization
         progressDialog = Dialog(requireContext())
         progressDialog.setContentView(R.layout.progreesbar)
 
         signinUser = sharedPreferences.getString("email","")
 
-//        navigation button handle in Tolbar
-        view.topAppBarmain.setNavigationOnClickListener {
-            requireActivity().onBackPressed()
-        }
+        contactAdapter = ContactAdapter(contactList,title,signinUser!!)
 
 //        Menu details available in toolbar
-        view.topAppBarmain.setOnMenuItemClickListener {
+        requireActivity().topAppBarmain.setOnMenuItemClickListener {
             onOptionsItemSelected(it)
         }
 
+        view.navigationhome.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.contact -> {
+                    val listfrag = ContactListViewFragment()
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.mainfragment, listfrag).commit()
+                }
+                R.id.weather ->{
+                    val weather = WeatherFragment()
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.mainfragment, weather).commit()
+                }
+            }
+            true
+        }
 //        creating contact floating bar
         view.create.setOnClickListener{
             val intent = Intent(requireContext(), CreateContactActivity::class.java)
@@ -113,23 +126,22 @@ class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
                 contactAdapter.filter.filter(s)
             }
             override fun afterTextChanged(s: Editable?) {
-
             }
         })
 
         title.contactDataLive.observe(requireActivity(), Observer {
             if (contactAdapter.selectedCount > 0){
-                view.topAppBarmain.title = it
-                view.topAppBarmain.menu.findItem(R.id.Deletefilemain).isVisible = true
-                view.topAppBarmain.menu.findItem(R.id.importfile).isVisible = false
-                view.topAppBarmain.menu.findItem(R.id.selectAllmain).isVisible = true
-                view.topAppBarmain.menu.findItem(R.id.exportfile).isVisible = true
+                requireActivity().topAppBarmain.title = it
+                requireActivity().topAppBarmain.menu.findItem(R.id.Deletefilemain).isVisible = true
+                requireActivity().topAppBarmain.menu.findItem(R.id.importfile).isVisible = false
+                requireActivity().topAppBarmain.menu.findItem(R.id.selectAllmain).isVisible = true
+                requireActivity().topAppBarmain.menu.findItem(R.id.exportfile).isVisible = true
 
             }else{
-                view.topAppBarmain.title = "Contact"
-                view.topAppBarmain.menu.findItem(R.id.Deletefilemain).isVisible = false
-                view.topAppBarmain.menu.findItem(R.id.importfile).isVisible = true
-                view.topAppBarmain.menu.findItem(R.id.selectAllmain).isVisible = false
+                requireActivity().topAppBarmain.title = "Contact"
+                requireActivity().topAppBarmain.menu.findItem(R.id.Deletefilemain).isVisible = false
+                requireActivity().topAppBarmain.menu.findItem(R.id.importfile).isVisible = true
+                requireActivity().topAppBarmain.menu.findItem(R.id.selectAllmain).isVisible = false
             }
         })
         return view
@@ -146,6 +158,7 @@ class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
             }
         })
     }
+
 
 //  Event Handling for different menu in menu bar
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import com.example.contact.R
 import com.example.contact.viewmodel.ContactViewModel
 import kotlinx.android.synthetic.main.aboutfragment.view.*
+import kotlinx.android.synthetic.main.activity_main.*
 
 class AboutFragment : Fragment(R.layout.aboutfragment) {
     lateinit var sharedPreferences: SharedPreferences
@@ -20,14 +21,24 @@ class AboutFragment : Fragment(R.layout.aboutfragment) {
         savedInstanceState: Bundle?
     ): View? {
 
+        requireActivity().topAppBarmain.menu.findItem(R.id.Deletefilemain).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.importfile).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.selectAllmain).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.exportfile).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.recent).isVisible = false
+        requireActivity().topAppBarmain.title = "About"
+        requireActivity().topAppBarmain.setNavigationIcon(R.drawable.ic_action_goback)
+
+
+        requireActivity().topAppBarmain.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
+
         sharedPreferences = requireActivity().getSharedPreferences("com.example.contact.user",
             Context.MODE_PRIVATE)
         val user :String? = sharedPreferences.getString("email","")
         val view = inflater.inflate(R.layout.aboutfragment,container,false)
-        view.aboutBar.setNavigationOnClickListener {
-            val settingFragment = SettingFragment()
-            parentFragmentManager.beginTransaction().replace(R.id.mainfragment, settingFragment).commit()
-        }
+
         val viewmodel = ContactViewModel(requireContext())
         user?.let { viewmodel.setAboutUser(it) }
         viewmodel.SaveResult.observe(requireActivity(), Observer {

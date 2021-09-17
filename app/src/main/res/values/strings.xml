@@ -25,5 +25,22 @@
     <string name="google_sync">Google Sync</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
-    <string name="search">Search...</string>
+    <string name="search">Search…</string>
+    <string name="export">Export</string>
+    <string name="delete">Delete</string>
+    <string name="importmenu">Import</string>
+    <string name="selectall">SelectAll</string>
+    <string name="recent_search">Recent Search</string>
+    <string name="searchbar">searchbar</string>
+    <string name="cloud">cloud</string>
+    <string name="audio">Audio</string>
+    <string name="audio_list">Audio List</string>
+    <string name="AboutFragment">AboutFragment</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="back_to_setting">Back To Setting</string>
+    <string name="submit">Submit</string>
+    <string name="home">Home</string>
+    <string name="details">Details</string>
 </resources>

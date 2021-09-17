@@ -21,27 +21,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:navigationIcon="@drawable/ic_action_menu"
+                app:menu="@menu/menudata"
                 app:navigationIconTint="@color/black"
                 android:background="@color/ic_launcher_background"
-                app:menu="@menu/menudata"
-                app:title="Contact"
                 app:titleCentered="true" />
 
         </com.google.android.material.appbar.AppBarLayout>
-    </RelativeLayout>
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/mainfragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/mainfragment"
+            android:layout_below="@+id/actionbar"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/sidebarnav" />
+
+    </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:background="@color/ic_launcher_background"
         android:id="@+id/sidenav"
         android:layout_gravity="start"
         app:headerLayout="@layout/navheader"
         android:fitsSystemWindows="true"
         app:menu="@menu/sidenavitems" />
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.contact.R
 import com.example.contact.viewmodel.ContactViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.weatherfragment.view.*
 
 class WeatherFragment : Fragment(R.layout.weatherfragment) {
@@ -30,16 +31,24 @@ class WeatherFragment : Fragment(R.layout.weatherfragment) {
         val view = inflater.inflate(R.layout.weatherfragment,container,false)
 
 
+        requireActivity().topAppBarmain.menu.findItem(R.id.Deletefilemain).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.importfile).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.selectAllmain).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.exportfile).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.recent).isVisible = true
+        requireActivity().topAppBarmain.title = "Weather"
+        requireActivity().topAppBarmain.setNavigationIcon(R.drawable.ic_action_goback)
+
         val viewModel = ContactViewModel(requireContext())
 
 //        navigation button handle in Tolbar
-        view.weatherbar.setNavigationOnClickListener {
+        requireActivity().topAppBarmain.setNavigationOnClickListener {
             val listfrag = ContactListViewFragment()
             parentFragmentManager.beginTransaction().replace(R.id.mainfragment, listfrag).commit()
         }
 
 //        Menu details available in toolbar
-        view.weatherbar.setOnMenuItemClickListener {
+        requireActivity().topAppBarmain.setOnMenuItemClickListener {
             onOptionsItemSelected(it)
         }
 

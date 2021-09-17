@@ -23,6 +23,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.api.services.people.v1.PeopleServiceScopes
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.progreesbar.*
 import kotlinx.android.synthetic.main.settingfragment.view.*
 import java.util.*
@@ -38,12 +39,22 @@ class SettingFragment :Fragment(R.layout.settingfragment) {
         savedInstanceState: Bundle?,
     ): View? {
 
+        requireActivity().topAppBarmain.menu.findItem(R.id.Deletefilemain).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.importfile).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.selectAllmain).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.exportfile).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.recent).isVisible = false
+        requireActivity().topAppBarmain.title = "Setting"
+        requireActivity().topAppBarmain.setNavigationIcon(R.drawable.ic_action_goback)
+        requireActivity().topAppBarmain.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
+
         contactViewModel = ContactViewModel(requireActivity())
         sharedPreferences = requireActivity().getSharedPreferences("com.example.contact.user",
             Context.MODE_PRIVATE)
         sharedPreferencesEditor = sharedPreferences.edit()
 
-        val user  = sharedPreferences.getString("email","")
         val view = inflater.inflate(R.layout.settingfragment,container,false)
         progressDialog = Dialog(requireContext())
         progressDialog.setContentView(R.layout.progreesbar)
@@ -73,8 +84,6 @@ class SettingFragment :Fragment(R.layout.settingfragment) {
                                 progressDialog.show()
 
                                 sharedPreferencesEditor.putString("email", "")
-        //                            val db = DBHelper(requireContext())
-        //                            db.dropDatabase()
 
                                 val workManager = WorkManager.getInstance(requireContext())
                                 val deleteContact = OneTimeWorkRequest.Builder(DeleteContactWorker::class.java).build()
@@ -178,20 +187,9 @@ class SettingFragment :Fragment(R.layout.settingfragment) {
                     progressDialog.importdetails.text = "Contact Syncing..."
                     progressDialog.setCancelable(false)
                     progressDialog.show()
-//                    val viewModel = ContactViewModel(requireActivity())
-//                    user?.let { it1 -> viewModel.setGoogleSync(it1, viewModel) }
-//                    viewModel.SaveResult.observe(
-//                        requireActivity(),
-//                        androidx.lifecycle.Observer {
-//                            progressDialog.dismiss()
-//                            val contactListViewFragment = ContactListViewFragment()
-//                            parentFragmentManager.beginTransaction()
-//                                .replace(R.id.mainfragment, contactListViewFragment).commit()
-//                        })
                     val workManager = WorkManager.getInstance(requireContext())
                     val googleContactSyncWorker = OneTimeWorkRequest.Builder(GoogleContactSyncWorker::class.java).build()
                     workManager.enqueue(googleContactSyncWorker)
-
                     workManager.getWorkInfoByIdLiveData(googleContactSyncWorker.id).observe(requireActivity(), androidx.lifecycle.Observer {
                         when (it.state.name) {
                             "SUCCEEDED" -> {
@@ -212,9 +210,7 @@ class SettingFragment :Fragment(R.layout.settingfragment) {
         sharedPreferencesEditor.apply()
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 200){
-            val user  = sharedPreferences.getString("email","")
             progressDialog.importdetails.text = "Contact Syncing..."
             progressDialog.setCancelable(false)
             progressDialog.show()

@@ -3,25 +3,10 @@
     android:layout_width="match_parent"
     android:background="@drawable/cloud2"
     android:orientation="vertical"
+    android:id="@+id/weatherFragment"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent">
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:id="@+id/actionbar"
-        android:layout_height="wrap_content">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/weatherbar"
-            style="@style/Widget.MaterialComponents.Toolbar.Surface"
-            android:layout_width="match_parent"
-            app:menu="@menu/weathermenu"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/ic_launcher_background"
-            app:navigationIcon="@drawable/ic_action_goback"
-            app:title="Weather"
-            app:titleCentered="true" />
-
-    </com.google.android.material.appbar.AppBarLayout>
    <LinearLayout
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
@@ -31,7 +16,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:hint="Search..."
+        android:hint="@string/search"
         android:padding="10dp"
         app:boxCornerRadiusBottomEnd="20dp"
         app:boxCornerRadiusBottomStart="20dp"
@@ -53,7 +38,7 @@
            android:id="@+id/weatherSearch"
            android:layout_height="45dp"
            android:src="@drawable/ic_action_weathersea"
-           android:contentDescription="searchbar" />
+           android:contentDescription="@string/searchbar" />
    </LinearLayout>
 
     <RelativeLayout
@@ -98,7 +83,8 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_below="@id/air"
-            android:src="@drawable/suncloud2" />
+            android:src="@drawable/suncloud2"
+            android:contentDescription="@string/cloud" />
 
     </RelativeLayout>
 
