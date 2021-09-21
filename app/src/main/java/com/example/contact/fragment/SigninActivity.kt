@@ -184,7 +184,6 @@ class SigninActivity : Fragment(R.layout.signin_fragment) {
                                             Timer().schedule(object : TimerTask() {
                                                 override fun run() {
                                                     progressDialog.dismiss()
-                                                    println(Emaillogin.text.toString().lowercase())
                                                     sharedPreferencesEditor.putString(
                                                         "email",
                                                         Emaillogin.text.toString().lowercase()

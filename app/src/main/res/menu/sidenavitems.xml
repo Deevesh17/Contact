@@ -5,28 +5,21 @@
     <item android:title="@string/profile">
         <menu>
             <item
-                android:id="@+id/aboutnav"
-                android:icon="@drawable/ic_eye_svgrepo_com"
-                android:title="@string/about" />
+                android:id="@+id/navhome"
+                android:icon="@drawable/ic_action_person"
+                android:title="@string/home" />
 
             <item
-                android:id="@+id/navchange"
-                android:icon="@drawable/loginimage"
-                android:title="@string/change_password" />
+                android:id="@+id/navaudio"
+                android:icon="@drawable/ic_action_audio"
+                android:title="@string/audio" />
 
             <item
-                android:id="@+id/nav_logout"
-                android:icon="@drawable/logoutmobile"
-                android:title="@string/logout" />
+                android:id="@+id/navsettings"
+                android:icon="@drawable/ic_action_setting"
+                android:title="@string/settings" />
         </menu>
     </item>
-    <item android:title="@string/google">
-        <menu>
-            <item
-                android:id="@+id/sync"
-                android:icon="@drawable/ic_action_sync"
-                android:title="@string/google_sync" />
-        </menu>
-    </item>
+
 
   </menu>

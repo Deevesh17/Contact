@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,7 +32,9 @@ import com.example.contact.model.DBHelper
 import com.example.contact.viewmodel.ContactViewModel
 import com.example.contact.worker.ExportContact
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.contactlistviewfragment.view.*
+import kotlinx.android.synthetic.main.navheader.view.*
 import kotlinx.android.synthetic.main.progreesbar.*
 
 class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
@@ -42,7 +45,7 @@ class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
     var selectedList :ArrayList<ContactData> = ArrayList()
     var signinUser : String? = null
     lateinit var sharedPreferences: SharedPreferences
-    lateinit var contactAdapter : ContactAdapter
+    var contactAdapter : ContactAdapter = ContactAdapter()
     lateinit var progressDialog : Dialog
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,14 +53,31 @@ class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
         savedInstanceState: Bundle?
     ): View? {
 
+        title = ContactViewModel((requireContext()))
+        requireActivity().topAppBarmain.menu.findItem(R.id.Deletefilemain).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.importfile).isVisible = true
+        requireActivity().topAppBarmain.menu.findItem(R.id.selectAllmain).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.exportfile).isVisible = true
+        requireActivity().topAppBarmain.menu.findItem(R.id.recent).isVisible = false
+        requireActivity().topAppBarmain.title = "Contact"
+        requireActivity().topAppBarmain.subtitle = ""
+
+        requireActivity().topAppBarmain.setNavigationIcon(R.drawable.ic_action_menu)
+
+//        title.setAudioCount(title)
+//        title.audioCountResult.observe(requireActivity(), Observer {
+//            if(it != null){
+//                headerView.audiocount.text = "Audio List Available is $it"
+//            }
+//        })
 
         sharedPreferences = requireActivity().getSharedPreferences("com.example.contact.user",
             Context.MODE_PRIVATE)
 
         val view = inflater.inflate(R.layout.contactlistviewfragment,container,false)
         listView = view.listview
-        view.navigationhome.background = null
-        view.navigationhome.menu.getItem(1).isEnabled = false
+        createAdapter()
+
         view.navigationhome.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.contact -> {
@@ -72,7 +92,7 @@ class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
             true
         }
         contactDb = DBHelper(requireContext())
-        title = ContactViewModel((requireContext()))
+
 
 //        progress bar initialization
         progressDialog = Dialog(requireContext())
@@ -81,12 +101,12 @@ class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
         signinUser = sharedPreferences.getString("email","")
 
 //        navigation button handle in Tolbar
-        view.topAppBarmain.setNavigationOnClickListener {
-            requireActivity().onBackPressed()
+        requireActivity().topAppBarmain.setNavigationOnClickListener {
+            requireActivity().maindrawable.openDrawer(GravityCompat.START)
         }
 
 //        Menu details available in toolbar
-        view.topAppBarmain.setOnMenuItemClickListener {
+        requireActivity().topAppBarmain.setOnMenuItemClickListener {
             onOptionsItemSelected(it)
         }
 
@@ -119,17 +139,17 @@ class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
 
         title.contactDataLive.observe(requireActivity(), Observer {
             if (contactAdapter.selectedCount > 0){
-                view.topAppBarmain.title = it
-                view.topAppBarmain.menu.findItem(R.id.Deletefilemain).isVisible = true
-                view.topAppBarmain.menu.findItem(R.id.importfile).isVisible = false
-                view.topAppBarmain.menu.findItem(R.id.selectAllmain).isVisible = true
-                view.topAppBarmain.menu.findItem(R.id.exportfile).isVisible = true
+                requireActivity().topAppBarmain.title = it
+                requireActivity().topAppBarmain.menu.findItem(R.id.Deletefilemain).isVisible = true
+                requireActivity().topAppBarmain.menu.findItem(R.id.importfile).isVisible = false
+                requireActivity().topAppBarmain.menu.findItem(R.id.selectAllmain).isVisible = true
+                requireActivity().topAppBarmain.menu.findItem(R.id.exportfile).isVisible = true
 
             }else{
-                view.topAppBarmain.title = "Contact"
-                view.topAppBarmain.menu.findItem(R.id.Deletefilemain).isVisible = false
-                view.topAppBarmain.menu.findItem(R.id.importfile).isVisible = true
-                view.topAppBarmain.menu.findItem(R.id.selectAllmain).isVisible = false
+                requireActivity().topAppBarmain.title = "Contact"
+                requireActivity().topAppBarmain.menu.findItem(R.id.Deletefilemain).isVisible = false
+                requireActivity().topAppBarmain.menu.findItem(R.id.importfile).isVisible = true
+                requireActivity().topAppBarmain.menu.findItem(R.id.selectAllmain).isVisible = false
             }
         })
         return view
@@ -137,12 +157,15 @@ class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
     override fun onResume() {
         super.onResume()
         contactList.clear()
+        val headerView = requireActivity().sidenav.getHeaderView(0)
         signinUser?.let { title.setDbData("GetDB",selectedList, it,title) }
         title.contactList.observe(requireActivity(), Observer {
             if(it != null){
                 progressDialog.dismiss()
                 contactList = it
-                createAdapter(it)
+                headerView.contactcount.text = "Contact Available is ${contactList.size}"
+//                createAdapter(it)
+                signinUser?.let { it1 -> contactAdapter.setData(it,title, it1) }
             }
         })
     }
@@ -153,7 +176,6 @@ class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
             R.id.importfile -> {
                 try{
                     if(ActivityCompat.checkSelfPermission(requireContext(),Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED){
-//                        createWorker()
                         val intent = Intent(activity, SelectContactActivity::class.java)
                         intent.putExtra("email",signinUser)
                         startActivity(intent)
@@ -254,8 +276,8 @@ class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
         workManager.enqueue(export)
     }
 
-    fun createAdapter(contact : ArrayList<ContactData>)  {
-        contactAdapter = signinUser?.let { ContactAdapter(contact, title, it) }!!
+    fun createAdapter()  {
+//        contactAdapter = signinUser?.let { ContactAdapter() }!!
         val layoutManager = LinearLayoutManager(requireContext())
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         listView.layoutManager = layoutManager

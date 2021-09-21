@@ -8,22 +8,25 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.contact.R
 import com.example.contact.activity.ContactDataActivity
 import com.example.contact.model.ContactData
 import com.example.contact.viewmodel.ContactViewModel
 import kotlinx.android.synthetic.main.activity_listdesign.view.*
-class ContactAdapter(val contact : ArrayList<ContactData>,val title : ContactViewModel,val signinUser : String) : RecyclerView.Adapter<ContactAdapter.ContactViewHolder>(),
+class ContactAdapter() : RecyclerView.Adapter<ContactAdapter.ContactViewHolder>(),
     Filterable {
-    var contactIds : ArrayList<String> = ArrayList()
     private var SelectedContact = ArrayList<ContactData>()
+    var contact : ArrayList<ContactData> = ArrayList()
     var selectedPosition = ArrayList<Int>()
     var removedPosition = ArrayList<Int>()
     var isSelectAll = false
     var selectedCount = 0
     var searchList = contact
     var ContactList = ArrayList<ContactData>(searchList)
+    lateinit var  title : ContactViewModel
+    lateinit var signinUser : String
     private var onClickAsSelect = false
     private var contactid = 0
     private lateinit var parent : ViewGroup
@@ -143,6 +146,17 @@ class ContactAdapter(val contact : ArrayList<ContactData>,val title : ContactVie
                 notifyDataSetChanged()
             }
         }
+    }
+
+    fun setData(newContactList: ArrayList<ContactData>, title : ContactViewModel, signinUser : String){
+        val contactDiffUtl = ContactDiffUtl(contact,newContactList)
+        val diffUtilResult = DiffUtil.calculateDiff(contactDiffUtl)
+        this.contact = newContactList
+        this.searchList = this.contact
+        this.ContactList = ArrayList(searchList)
+        this.title = title
+        this.signinUser = signinUser
+        diffUtilResult.dispatchUpdatesTo(this)
     }
 
 }

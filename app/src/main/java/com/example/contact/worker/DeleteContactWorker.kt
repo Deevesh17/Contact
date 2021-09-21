@@ -6,11 +6,14 @@ import android.database.Cursor
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.contact.model.DBHelper
+import com.example.contact.musicroomdb.AudioDB
 
 class DeleteContactWorker(val context: Context,workerParameters: WorkerParameters) : Worker(context,workerParameters) {
     private val contactDb = DBHelper(context)
     lateinit var sharedPreferences: SharedPreferences
     var cursorTotal : Int = 0
+    val audioDB = AudioDB.getDatabase(context)
+    val audioDao = audioDB?.audioDao()
 
     override fun doWork(): Result {
         when {
@@ -36,6 +39,8 @@ class DeleteContactWorker(val context: Context,workerParameters: WorkerParameter
             println(e)
         }
         cursor = contactDb.getdata(signinUser)
+
+        audioDao?.DeleteFile()
         return if(cursor?.count == 0)
             0
         else 1

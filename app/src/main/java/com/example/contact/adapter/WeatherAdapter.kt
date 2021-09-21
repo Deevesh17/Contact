@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.recentadapter.view.*
 class WeatherAdapter(val searclList : ArrayList<String>) :RecyclerView.Adapter<WeatherAdapter.WeatherViewHolder>() {
 
     class WeatherViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
-        var districtName = itemView.districtName
+        var districtName = itemView.viewTitle
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {

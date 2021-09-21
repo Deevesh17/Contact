@@ -6,9 +6,7 @@
         android:icon="@drawable/ic_action_contact"
         android:enabled="true"
         android:title="@string/contact"/>
-    <item
-        android:id="@+id/placeholder"
-        android:title=""/>
+
     <item
         android:id="@+id/weather"
         android:icon="@drawable/ic_action_weather"

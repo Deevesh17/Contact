@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.core.view.GravityCompat
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.example.contact.R
@@ -23,11 +23,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.api.services.people.v1.PeopleServiceScopes
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.progreesbar.*
 import kotlinx.android.synthetic.main.settingfragment.view.*
 import java.util.*
 
-class SettingFragment :Fragment(R.layout.settingfragment) {
+class SettingFragment : androidx.fragment.app.Fragment(R.layout.settingfragment) {
     lateinit var progressDialog: Dialog
     lateinit var sharedPreferences: SharedPreferences
     lateinit var sharedPreferencesEditor : SharedPreferences.Editor
@@ -43,7 +44,15 @@ class SettingFragment :Fragment(R.layout.settingfragment) {
             Context.MODE_PRIVATE)
         sharedPreferencesEditor = sharedPreferences.edit()
 
-        val user  = sharedPreferences.getString("email","")
+        requireActivity().topAppBarmain.menu.findItem(R.id.Deletefilemain).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.importfile).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.selectAllmain).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.exportfile).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.recent).isVisible = false
+        requireActivity().topAppBarmain.title = "Setting"
+        requireActivity().topAppBarmain.subtitle = ""
+        requireActivity().topAppBarmain.setNavigationIcon(R.drawable.ic_action_menu)
+
         val view = inflater.inflate(R.layout.settingfragment,container,false)
         progressDialog = Dialog(requireContext())
         progressDialog.setContentView(R.layout.progreesbar)
@@ -54,6 +63,9 @@ class SettingFragment :Fragment(R.layout.settingfragment) {
             .build()
         val mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), googleSignin);
 
+        requireActivity().topAppBarmain.setNavigationOnClickListener {
+            requireActivity().maindrawable.openDrawer(GravityCompat.START)
+        }
 //        signout Progress
         view.outcard.setOnClickListener {
             when {
@@ -61,7 +73,7 @@ class SettingFragment :Fragment(R.layout.settingfragment) {
                     MaterialAlertDialogBuilder(requireActivity())
                         .setTitle("SignOut!!")
                         .setMessage("Sure You Want to sign out from this device?")
-                        .setNeutralButton("No") { dialog, which ->
+                         .setNeutralButton("No") { dialog, which ->
                         }
                         .setPositiveButton("Yes") { dialog, which ->
 
@@ -175,33 +187,7 @@ class SettingFragment :Fragment(R.layout.settingfragment) {
                         Scope(PeopleServiceScopes.CONTACTS_READONLY)
                     )
                 } else {
-                    progressDialog.importdetails.text = "Contact Syncing..."
-                    progressDialog.setCancelable(false)
-                    progressDialog.show()
-//                    val viewModel = ContactViewModel(requireActivity())
-//                    user?.let { it1 -> viewModel.setGoogleSync(it1, viewModel) }
-//                    viewModel.SaveResult.observe(
-//                        requireActivity(),
-//                        androidx.lifecycle.Observer {
-//                            progressDialog.dismiss()
-//                            val contactListViewFragment = ContactListViewFragment()
-//                            parentFragmentManager.beginTransaction()
-//                                .replace(R.id.mainfragment, contactListViewFragment).commit()
-//                        })
-                    val workManager = WorkManager.getInstance(requireContext())
-                    val googleContactSyncWorker = OneTimeWorkRequest.Builder(GoogleContactSyncWorker::class.java).build()
-                    workManager.enqueue(googleContactSyncWorker)
-
-                    workManager.getWorkInfoByIdLiveData(googleContactSyncWorker.id).observe(requireActivity(), androidx.lifecycle.Observer {
-                        when (it.state.name) {
-                            "SUCCEEDED" -> {
-                                progressDialog.dismiss()
-                            val contactListViewFragment = ContactListViewFragment()
-                            parentFragmentManager.beginTransaction()
-                                .replace(R.id.mainfragment, contactListViewFragment).commit()
-                            }
-                        }
-                    })
+                   googleSyncWorker()
                 }
             }
         }
@@ -214,35 +200,28 @@ class SettingFragment :Fragment(R.layout.settingfragment) {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 200){
-            val user  = sharedPreferences.getString("email","")
-            progressDialog.importdetails.text = "Contact Syncing..."
-            progressDialog.setCancelable(false)
-            progressDialog.show()
-            val workManager = WorkManager.getInstance(requireContext())
-            val googleContactSyncWorker = OneTimeWorkRequest.Builder(GoogleContactSyncWorker::class.java).build()
-            workManager.enqueue(googleContactSyncWorker)
+            googleSyncWorker()
+        }
+    }
+    private fun googleSyncWorker(){
+        progressDialog.importdetails.text = "Contact Syncing..."
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+        val workManager = WorkManager.getInstance(requireContext())
+        val googleContactSyncWorker = OneTimeWorkRequest.Builder(GoogleContactSyncWorker::class.java).build()
+        workManager.enqueue(googleContactSyncWorker)
 
-            workManager.getWorkInfoByIdLiveData(googleContactSyncWorker.id).observe(requireActivity(), androidx.lifecycle.Observer {
+        workManager.getWorkInfoByIdLiveData(googleContactSyncWorker.id).observe(requireActivity()
+            , androidx.lifecycle.Observer {
+                println(it.state.name)
                 when (it.state.name) {
                     "SUCCEEDED" -> {
                         progressDialog.dismiss()
-                        val contactListViewFragment = ContactListViewFragment()
-                        parentFragmentManager.beginTransaction()
-                            .replace(R.id.mainfragment, contactListViewFragment).commit()
+//                         val contactListViewFragment = ContactListViewFragment()
+//                         replaceFragment(contactListViewFragment)
                     }
                 }
             })
-//            val viewModel = ContactViewModel(requireActivity())
-//            user?.let { it1 -> viewModel.setGoogleSync(it1, viewModel) }
-//            viewModel.SaveResult.observe(
-//                requireActivity(),
-//                androidx.lifecycle.Observer {
-//                    progressDialog.dismiss()
-//                    val contactListViewFragment = ContactListViewFragment()
-//                    parentFragmentManager.beginTransaction()
-//                        .replace(R.id.mainfragment, contactListViewFragment).commit()
-//                })
-        }
     }
 
 }

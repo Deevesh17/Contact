@@ -61,23 +61,24 @@ class GoogleContactSyncWorker (val context: Context, workerParameters: WorkerPar
                         )?.streetAddress
                     if (address == "nullnullnull") address = null
                     if (person.phoneNumbers?.get(0)?.canonicalForm != null) {
-                        try {
-                            contactDb.insertuserdata(
-                                person.names?.get(0)?.getDisplayName(),
-                                person.phoneNumbers?.get(0)?.canonicalForm,
-                                base64image,
-                                person.occupations?.get(0)?.value,
-                                person.emailAddresses?.get(0)?.value,
-                                person.relations?.get(0)?.person,
-                                address,
-                                person.nicknames?.get(0)?.value,
-                                null,
-                                null,
-                                user
-                            )
-                        } catch (e: Exception) {
-                            println(e)
-                        }
+
+                        println("1111 ${person.names?.get(0)?.displayName}")
+                            if(person.names?.get(0)?.displayName != null) {
+                                contactDb.insertuserdata(
+                                    person.names?.get(0)?.displayName,
+                                    person.phoneNumbers?.get(0)?.canonicalForm,
+                                    base64image,
+                                    person.occupations?.get(0)?.value,
+                                    person.emailAddresses?.get(0)?.value,
+                                    person.relations?.get(0)?.person,
+                                    address,
+                                    person.nicknames?.get(0)?.value,
+                                    null,
+                                    null,
+                                    user
+                                )
+                            }
+
                     }
                 }
                 return 1

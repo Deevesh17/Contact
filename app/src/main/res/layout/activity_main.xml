@@ -25,15 +25,24 @@
                 android:background="@color/ic_launcher_background"
                 app:menu="@menu/menudata"
                 app:title="Contact"
+                app:subtitle=""
+                app:subtitleCentered="true"
                 app:titleCentered="true" />
 
         </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/mainfragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/sidebarnav"
+            android:layout_below="@+id/actionbar"  />
+
     </RelativeLayout>
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/mainfragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+
 
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"

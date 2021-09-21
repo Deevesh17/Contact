@@ -6,7 +6,6 @@
     <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:fontFamily="serif"
     android:padding="20dp"
     android:id="@+id/contactcount"
     android:textColor="@color/black"
@@ -15,7 +14,6 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="serif"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:padding="20dp"

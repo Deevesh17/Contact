@@ -4,22 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:id="@+id/actionbar"
-        android:layout_height="wrap_content">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/aboutBar"
-            style="@style/Widget.MaterialComponents.Toolbar.Surface"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/ic_launcher_background"
-            app:navigationIcon="@drawable/ic_action_goback"
-            app:title="About"
-            app:titleCentered="true" />
-
-    </com.google.android.material.appbar.AppBarLayout>
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"

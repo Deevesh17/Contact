@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -15,6 +14,7 @@ import com.example.contact.viewmodel.ContactViewModel
 import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.changepasswordfragment.view.*
 
 class ChangePasswordFragment : Fragment(R.layout.changepasswordfragment) {
@@ -24,20 +24,28 @@ class ChangePasswordFragment : Fragment(R.layout.changepasswordfragment) {
         savedInstanceState: Bundle?
     ): View? {
 
-        lateinit var sharedPreferences: SharedPreferences
-
-        sharedPreferences = requireActivity().getSharedPreferences("com.example.contact.user",
+        val sharedPreferences: SharedPreferences = requireActivity().getSharedPreferences("com.example.contact.user",
             Context.MODE_PRIVATE)
 
         val user : String? = sharedPreferences.getString("email","")
 
         val view = inflater.inflate(R.layout.changepasswordfragment,container,false)
 
-//        Animation
-        val topAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.topanimation)
-        val bottomAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.bottomanimation)
-        view.fragname.animation = topAnimation
-        view.changescroll.animation = bottomAnimation
+
+        requireActivity().topAppBarmain.menu.findItem(R.id.Deletefilemain).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.importfile).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.selectAllmain).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.exportfile).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.recent).isVisible = false
+        requireActivity().topAppBarmain.title = "Change Password"
+        requireActivity().topAppBarmain.subtitle = ""
+
+        requireActivity().topAppBarmain.setNavigationIcon(R.drawable.ic_action_goback)
+
+        requireActivity().topAppBarmain.setNavigationOnClickListener {
+            parentFragmentManager.beginTransaction().replace(R.id.mainfragment, SettingFragment()).commit()
+        }
+
 
 //        Checking the user from google or facebook or normal user
         val acct = GoogleSignIn.getLastSignedInAccount(requireActivity())
@@ -82,14 +90,6 @@ class ChangePasswordFragment : Fragment(R.layout.changepasswordfragment) {
             }
         }
 
-//        Move to settings fragment
-        view.backtosetting.setOnClickListener {
-            val setting = SettingFragment()
-            val bundle = Bundle()
-            bundle.putString("email",user)
-            setting.arguments = bundle
-            parentFragmentManager.beginTransaction().replace(R.id.mainfragment,setting).commit()
-        }
         return view
     }
 }

@@ -2,17 +2,11 @@ package com.example.contact.musicroomdb
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.File
 
 @Entity(tableName = "audio")
-class Audio(
-    @PrimaryKey(autoGenerate = true)
-    private var musicID: Int
-) {
-    private var music : String
-        get() {
-            return music
-        }
-        set(value) {
-            this.music = value
-        }
-}
+data class Audio(
+    @PrimaryKey(autoGenerate = true) var audioId: Int,
+    var audioTitle: String,
+    var audioFilePath: File?
+)

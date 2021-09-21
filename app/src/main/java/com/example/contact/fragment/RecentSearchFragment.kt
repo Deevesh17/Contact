@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import com.example.contact.R
 import com.example.contact.adapter.WeatherAdapter
 import com.example.contact.viewmodel.ContactViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.recentsearchfragment.view.*
 
 class RecentSearchFragment : Fragment(R.layout.recentsearchfragment) {
@@ -21,13 +22,22 @@ class RecentSearchFragment : Fragment(R.layout.recentsearchfragment) {
         savedInstanceState: Bundle?
     ): View? {
 
+        requireActivity().topAppBarmain.menu.findItem(R.id.Deletefilemain).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.importfile).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.selectAllmain).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.exportfile).isVisible = false
+        requireActivity().topAppBarmain.menu.findItem(R.id.recent).isVisible = true
+        requireActivity().topAppBarmain.title = "Recent Search"
+        requireActivity().topAppBarmain.subtitle = ""
+
+        requireActivity().topAppBarmain.setNavigationIcon(R.drawable.ic_action_goback)
         sharedPreferences = requireActivity().getSharedPreferences("com.example.contact.user",
             Context.MODE_PRIVATE)
 
         val user  = sharedPreferences.getString("email","")
         val view = inflater.inflate(R.layout.recentsearchfragment,container,false)
 
-        view.recentBar.setNavigationOnClickListener {
+        requireActivity().topAppBarmain.setNavigationOnClickListener {
             val weatherFragment = WeatherFragment()
             parentFragmentManager.beginTransaction().replace(R.id.mainfragment, weatherFragment).commit()
         }

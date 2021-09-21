@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.progreesbar.*
 
 class SelectContactActivity : AppCompatActivity() {
     lateinit var dialog : Dialog
-    private lateinit var contactAdapter : ContactAdapter
+    var contactAdapter : ContactAdapter = ContactAdapter()
     var selectedList :ArrayList<ContactData> = ArrayList()
     val contactDb = DBHelper(this)
     var signinUser : String? = null
@@ -31,7 +31,7 @@ class SelectContactActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_contact)
 
-
+        createAdapter()
         sharedPreferences = this.getSharedPreferences("com.example.contact.user",
             Context.MODE_PRIVATE)
 
@@ -56,7 +56,8 @@ class SelectContactActivity : AppCompatActivity() {
         title.contactList.observe(this, Observer {
             dialog.dismiss()
             contactList = it
-            createAdapter(it)
+            signinUser?.let { it1 -> contactAdapter.setData(it,title, it1) }
+//            createAdapter(it)
         })
 
 //        observed the saved state
@@ -127,8 +128,8 @@ class SelectContactActivity : AppCompatActivity() {
         super.onPause()
         dialog.dismiss()
     }
-    private fun createAdapter(contactList: ArrayList<ContactData>) {
-        contactAdapter = signinUser?.let { ContactAdapter(contactList,title, it) }!!
+    private fun createAdapter() {
+//        contactAdapter = signinUser?.let { ContactAdapter(contactList,title, it) }!!
         selectList.adapter = contactAdapter
     }
 }

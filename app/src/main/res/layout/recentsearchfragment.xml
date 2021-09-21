@@ -7,30 +7,12 @@
     android:layout_height="match_parent"
     android:background="#001CB68A"
     tools:context=".activity.MainActivity">
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:id="@+id/actionbar"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/recentBar"
-            style="@style/Widget.MaterialComponents.Toolbar.Surface"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/ic_launcher_background"
-            app:navigationIcon="@drawable/ic_action_goback"
-            app:title="Recent Search"
-            app:titleCentered="true" />
-
-    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recentview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/searchint"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
 
 
 </LinearLayout>

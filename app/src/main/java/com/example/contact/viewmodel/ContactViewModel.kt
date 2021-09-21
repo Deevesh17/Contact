@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.contact.model.*
+import com.example.contact.musicroomdb.Audio
 import java.util.*
 
 class ContactViewModel(private val ctx : Context) : ViewModel() {
@@ -14,12 +15,22 @@ class ContactViewModel(private val ctx : Context) : ViewModel() {
     var weatherResponce: MutableLiveData<String> = MutableLiveData<String>()
     var searchList: MutableLiveData<ArrayList<String>> = MutableLiveData<ArrayList<String>>()
     var contactList: MutableLiveData<ArrayList<ContactData>> = MutableLiveData()
-    var deleteResult : MutableLiveData<Int> = MutableLiveData()
+    var audioCountResult : MutableLiveData<String> = MutableLiveData()
+    var audiofile : MutableLiveData<List<Audio>> = MutableLiveData()
+
     fun setValutodata(title : String):Boolean{
         contactDataLive.value = title
         return true
     }
 
+    fun setAudioCount(viewModel: ContactViewModel){
+        val audioFileModel = AudioFileModel(ctx,viewModel)
+        audioFileModel.getCountOfFileCoroutine()
+    }
+    fun setAudioFile(viewModel: ContactViewModel){
+        val audioFileModel = AudioFileModel(ctx,viewModel)
+        audioFileModel.getAudioFile()
+    }
 //    SETDATA FUNCTION OF LOGIN ACTIVITY
     fun setPasswordResult(email : String,Originalpassword : String){
         val loginPasswordModel = LoginPasswordModel(ctx)

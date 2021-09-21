@@ -20,4 +20,7 @@
         android:visible="false"
         android:icon="@drawable/ic_action_selectall"
         app:showAsAction="never"/>
+    <item  android:id="@+id/recent"
+        android:title="Recent Search"
+        app:showAsAction="never"/>
 </menu>
