@@ -12,9 +12,9 @@ import com.example.contact.R
 import com.example.contact.adapter.WeatherAdapter
 import com.example.contact.viewmodel.ContactViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.recentsearchfragment.view.*
+import kotlinx.android.synthetic.main.fragment_recentsearch.view.*
 
-class RecentSearchFragment : Fragment(R.layout.recentsearchfragment) {
+class RecentSearchFragment : Fragment(R.layout.fragment_recentsearch) {
     lateinit var sharedPreferences: SharedPreferences
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,7 +35,7 @@ class RecentSearchFragment : Fragment(R.layout.recentsearchfragment) {
             Context.MODE_PRIVATE)
 
         val user  = sharedPreferences.getString("email","")
-        val view = inflater.inflate(R.layout.recentsearchfragment,container,false)
+        val view = inflater.inflate(R.layout.fragment_recentsearch,container,false)
 
         requireActivity().topAppBarmain.setNavigationOnClickListener {
             val weatherFragment = WeatherFragment()

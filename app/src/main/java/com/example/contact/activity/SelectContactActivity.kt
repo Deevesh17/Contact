@@ -10,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.contact.R
 import com.example.contact.adapter.ContactAdapter
 import com.example.contact.model.ContactData
@@ -57,6 +58,7 @@ class SelectContactActivity : AppCompatActivity() {
             dialog.dismiss()
             contactList = it
             signinUser?.let { it1 -> contactAdapter.setData(it,title, it1) }
+
 //            createAdapter(it)
         })
 
@@ -102,6 +104,8 @@ class SelectContactActivity : AppCompatActivity() {
                 }else{
                     selectedList = contactAdapter.getSelectedContactList()
                 }
+                dialog = Dialog(this)
+                dialog.setContentView(R.layout.progreesbar)
                 dialog.importdetails.setText("Saving...")
                 dialog.setCancelable(false)
                 dialog.show()
@@ -130,6 +134,9 @@ class SelectContactActivity : AppCompatActivity() {
     }
     private fun createAdapter() {
 //        contactAdapter = signinUser?.let { ContactAdapter(contactList,title, it) }!!
+        val layoutManager = LinearLayoutManager(this)
+        layoutManager.orientation = LinearLayoutManager.VERTICAL
+        selectList.layoutManager = layoutManager
         selectList.adapter = contactAdapter
     }
 }

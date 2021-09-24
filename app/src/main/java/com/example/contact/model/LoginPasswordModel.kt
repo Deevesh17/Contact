@@ -2,8 +2,9 @@ package com.example.contact.model
 
 import android.content.Context
 import android.database.Cursor
-import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import java.util.regex.Pattern
 
 class LoginPasswordModel(val context : Context) {
@@ -19,14 +20,19 @@ class LoginPasswordModel(val context : Context) {
         }
     }
 
-    fun CreateAccount(email: String){
+    fun CreateGoogleAccount(email: String){
         val cursor : Cursor? = getDataFromDB(email)
         val acct = GoogleSignIn.getLastSignedInAccount(context)
         if (cursor?.count == 0) {
-            if(acct != null) {
-                logInDB.insertuserdata(acct.displayName, acct.email, null, null)
+            if(acct != null) logInDB.insertuserdata(acct.displayName, acct.email, null, null)
+        }
+    }
+    fun CreateFacebookAccount(email: String){
+        Firebase.auth.currentUser.let {
+            val cursor: Cursor? = getDataFromDB(email)
+            if (cursor?.count == 0) {
+                logInDB.insertuserdata(it?.displayName, it?.email, null, null)
             }
-            if(AccessToken.isCurrentAccessTokenActive()) logInDB.insertuserdata(null,email, null, null)
         }
     }
 

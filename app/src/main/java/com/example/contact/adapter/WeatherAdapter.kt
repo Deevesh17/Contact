@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.contact.R
-import kotlinx.android.synthetic.main.recentadapter.view.*
+import kotlinx.android.synthetic.main.adapter_weatherrecentsearch.view.*
 
 class WeatherAdapter(val searclList : ArrayList<String>) :RecyclerView.Adapter<WeatherAdapter.WeatherViewHolder>() {
 
@@ -15,7 +15,7 @@ class WeatherAdapter(val searclList : ArrayList<String>) :RecyclerView.Adapter<W
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
         val layoutinflater = LayoutInflater.from(parent.context)
-        val view  = layoutinflater.inflate(R.layout.recentadapter,parent,false)
+        val view  = layoutinflater.inflate(R.layout.adapter_weatherrecentsearch,parent,false)
         return WeatherViewHolder(view)
     }
 

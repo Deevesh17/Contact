@@ -11,9 +11,9 @@ import androidx.fragment.app.Fragment
 import com.example.contact.R
 import com.example.contact.viewmodel.ContactViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.forgetpasswordfragment.view.*
+import kotlinx.android.synthetic.main.fragment_forgetpassword.view.*
 
-class ForgetPasswordFragment : Fragment(R.layout.forgetpasswordfragment) {
+class ForgetPasswordFragment : Fragment(R.layout.fragment_forgetpassword) {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -24,7 +24,7 @@ class ForgetPasswordFragment : Fragment(R.layout.forgetpasswordfragment) {
         var sharedPreferences: SharedPreferences = requireActivity().getSharedPreferences("com.example.contact.user",
             Context.MODE_PRIVATE)
 
-        val view = inflater.inflate(R.layout.forgetpasswordfragment, container, false)
+        val view = inflater.inflate(R.layout.fragment_forgetpassword, container, false)
 
 //        Annimation
         val topAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.topanimation)
@@ -36,7 +36,7 @@ class ForgetPasswordFragment : Fragment(R.layout.forgetpasswordfragment) {
 
 //        back to login
         view.backtologin.setOnClickListener {
-            val signinFragment = SigninActivity()
+            val signinFragment = SigninFragment()
             parentFragmentManager.beginTransaction().replace(R.id.fragment, signinFragment).commit()
         }
 

@@ -8,13 +8,13 @@ import org.junit.Test
 
 class SignupPasswordModelTest{
 
-    lateinit var signupPasswordModel: SignupPasswordModel
+    lateinit var signupPasswordModel: SignupModel
 
     val mContextMock = mockk<Context>(relaxed = true)
 
     @Before
     fun setUp() {
-        signupPasswordModel = SignupPasswordModel(mContextMock)
+        signupPasswordModel = SignupModel(mContextMock)
     }
 
     @Test

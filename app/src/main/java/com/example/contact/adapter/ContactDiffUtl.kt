@@ -18,17 +18,7 @@ class ContactDiffUtl(val oldList :ArrayList<ContactData>, val newList : ArrayLis
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return when{
-            oldList[oldItemPosition].contactId != newList[newItemPosition].contactId -> {false}
-            oldList[oldItemPosition].name != newList[newItemPosition].name -> {false}
-            oldList[oldItemPosition].email != newList[newItemPosition].email -> {false}
-            oldList[oldItemPosition].contactgroup != newList[newItemPosition].contactgroup -> {false}
-            oldList[oldItemPosition].website != newList[newItemPosition].website -> {false}
-            oldList[oldItemPosition].number != newList[newItemPosition].number -> {false}
-            oldList[oldItemPosition].profile != newList[newItemPosition].profile -> {false}
-            oldList[oldItemPosition].notes != newList[newItemPosition].notes -> {false}
-            oldList[oldItemPosition].nickname != newList[newItemPosition].nickname -> {false}
-            oldList[oldItemPosition].company != newList[newItemPosition].company -> {false}
-            oldList[oldItemPosition].address != newList[newItemPosition].address -> {false}
+            oldList[oldItemPosition] != newList[newItemPosition] -> {false}
             else -> {true}
         }
     }

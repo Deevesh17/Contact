@@ -29,22 +29,27 @@
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/activity_splash_screen.xml" value="0.3451086956521739" />
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/activity_update.xml" value="0.24547101449275363" />
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/activity_user.xml" value="0.3451086956521739" />
+        <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/adapter_contactlist.xml" value="0.23783783783783785" />
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/additional_field.xml" value="0.24166666666666667" />
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/audiofragment.xml" value="0.23783783783783785" />
+        <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/audioseekbar.xml" value="0.23783783783783785" />
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/changepasswordfragment.xml" value="0.12" />
-        <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/chooseimage.xml" value="0.360054347826087" />
+        <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/chooseimage.xml" value="0.152" />
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/contactlistviewfragment.xml" value="0.176" />
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/createnewpassword.xml" value="0.34148550724637683" />
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/dropdown.xml" value="0.23550724637681159" />
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/field_in_data.xml" value="0.24166666666666667" />
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/fieldtext.xml" value="0.2441123188405797" />
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/forgetpasswordfragment.xml" value="0.34148550724637683" />
+        <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/fragment_about.xml" value="0.23783783783783785" />
+        <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/fragment_signin.xml" value="0.1" />
+        <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/fragment_signupuser.xml" value="0.23783783783783785" />
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/navheader.xml" value="0.23783783783783785" />
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/progreesbar.xml" value="0.23550724637681159" />
-        <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/recentadapter.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/recentadapter.xml" value="0.152" />
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/recentsearchfragment.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/settingfragment.xml" value="0.2" />
-        <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/signin_fragment.xml" value="0.264" />
+        <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/signin_fragment.xml" value="0.12" />
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/signup_fragment.xml" value="0.264" />
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/layout/weatherfragment.xml" value="0.2" />
         <entry key="..\:/Users/deeve/AndroidStudioProjects/Contact/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.36666666666666664" />

@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,12 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.contact.R
 import com.example.contact.adapter.AudioAdapter
 import com.example.contact.model.AudioFileModel
+import com.example.contact.model.RemoteConfigUtills
 import com.example.contact.viewmodel.ContactViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.audiofragment.view.*
+import kotlinx.android.synthetic.main.fragment_audio.view.*
 import kotlinx.android.synthetic.main.progreesbar.*
 
-class AudioFragment : Fragment(R.layout.audiofragment) {
+class AudioFragment : Fragment(R.layout.fragment_audio) {
     lateinit var viewModel : ContactViewModel
     lateinit var progressDialog: Dialog
     lateinit var fragview : View
@@ -31,20 +33,20 @@ class AudioFragment : Fragment(R.layout.audiofragment) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.audiofragment,container,false)
+        val view = inflater.inflate(R.layout.fragment_audio,container,false)
         requireActivity().topAppBarmain.menu.findItem(R.id.Deletefilemain).isVisible = false
         requireActivity().topAppBarmain.menu.findItem(R.id.importfile).isVisible = false
         requireActivity().topAppBarmain.menu.findItem(R.id.selectAllmain).isVisible = false
         requireActivity().topAppBarmain.menu.findItem(R.id.exportfile).isVisible = false
         requireActivity().topAppBarmain.menu.findItem(R.id.recent).isVisible = false
-        requireActivity().topAppBarmain.title = "Audio File"
+        requireActivity().topAppBarmain.title = "Audio"
+        requireActivity().topAppBarmain.setBackgroundColor(Color.parseColor(RemoteConfigUtills.getAudioToolBarBackground()))
         requireActivity().topAppBarmain.subtitle = "Welcome ${arguments?.getString("userName")}"
         requireActivity().topAppBarmain.setNavigationIcon(R.drawable.ic_action_menu)
         requireActivity().topAppBarmain.setNavigationOnClickListener {
             requireActivity().maindrawable.openDrawer(GravityCompat.START)
         }
         viewModel = ContactViewModel(requireContext())
-
         viewModel.setAudioFile(viewModel)
         progressDialog = Dialog(requireContext())
 
@@ -81,11 +83,24 @@ class AudioFragment : Fragment(R.layout.audiofragment) {
         super.onResume()
         val intent = Intent("update.audio.count")
         viewModel.audiofile.observe(requireActivity(), Observer {
-            audioAdapter.setData(it)
+            audioAdapter.setData(it,requireContext())
             progressDialog.dismiss()
             intent.putExtra("audioCount",it.size)
             requireActivity().sendBroadcast(intent)
         })
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if(audioAdapter.play != null)
+        {
+            if(audioAdapter.play?.isPlaying!!){
+                audioAdapter.play?.stop()
+                audioAdapter.play?.release()
+                audioAdapter.play = null
+                audioAdapter.lastPlayedImage.let { it?.setImageResource(R.drawable.play) }
+            }
+        }
     }
 
     fun createAdapter() {

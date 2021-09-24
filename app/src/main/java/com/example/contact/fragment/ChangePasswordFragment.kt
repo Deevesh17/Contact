@@ -2,6 +2,7 @@ package com.example.contact.fragment
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,14 +11,15 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.contact.R
+import com.example.contact.model.RemoteConfigUtills
 import com.example.contact.viewmodel.ContactViewModel
 import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.changepasswordfragment.view.*
+import kotlinx.android.synthetic.main.fragment_changepassword.view.*
 
-class ChangePasswordFragment : Fragment(R.layout.changepasswordfragment) {
+class ChangePasswordFragment : Fragment(R.layout.fragment_changepassword) {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -29,7 +31,7 @@ class ChangePasswordFragment : Fragment(R.layout.changepasswordfragment) {
 
         val user : String? = sharedPreferences.getString("email","")
 
-        val view = inflater.inflate(R.layout.changepasswordfragment,container,false)
+        val view = inflater.inflate(R.layout.fragment_changepassword,container,false)
 
 
         requireActivity().topAppBarmain.menu.findItem(R.id.Deletefilemain).isVisible = false
@@ -39,6 +41,7 @@ class ChangePasswordFragment : Fragment(R.layout.changepasswordfragment) {
         requireActivity().topAppBarmain.menu.findItem(R.id.recent).isVisible = false
         requireActivity().topAppBarmain.title = "Change Password"
         requireActivity().topAppBarmain.subtitle = ""
+        requireActivity().topAppBarmain.setBackgroundColor(Color.parseColor(RemoteConfigUtills.getAudioToolBarBackground()))
 
         requireActivity().topAppBarmain.setNavigationIcon(R.drawable.ic_action_goback)
 

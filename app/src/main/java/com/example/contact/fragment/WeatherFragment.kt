@@ -12,9 +12,9 @@ import androidx.lifecycle.Observer
 import com.example.contact.R
 import com.example.contact.viewmodel.ContactViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.weatherfragment.view.*
+import kotlinx.android.synthetic.main.fragment_weather.view.*
 
-class WeatherFragment : Fragment(R.layout.weatherfragment) {
+class WeatherFragment : Fragment(R.layout.fragment_weather) {
     var user : String? = null
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,7 +37,7 @@ class WeatherFragment : Fragment(R.layout.weatherfragment) {
             Context.MODE_PRIVATE)
 
         user = sharedPreferences.getString("email","")
-        val view = inflater.inflate(R.layout.weatherfragment,container,false)
+        val view = inflater.inflate(R.layout.fragment_weather,container,false)
 
 
         val viewModel = ContactViewModel(requireContext())

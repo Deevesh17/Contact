@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -29,15 +30,16 @@ import com.example.contact.activity.SelectContactActivity
 import com.example.contact.adapter.ContactAdapter
 import com.example.contact.model.ContactData
 import com.example.contact.model.DBHelper
+import com.example.contact.model.RemoteConfigUtills
 import com.example.contact.viewmodel.ContactViewModel
 import com.example.contact.worker.ExportContact
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.contactlistviewfragment.view.*
+import kotlinx.android.synthetic.main.fragment_contactlist.view.*
 import kotlinx.android.synthetic.main.navheader.view.*
 import kotlinx.android.synthetic.main.progreesbar.*
 
-class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
+class ContactListViewFragment : Fragment(R.layout.fragment_contactlist) {
     var contactList :ArrayList<ContactData> = ArrayList()
     lateinit var contactDb : DBHelper
     lateinit var listView : RecyclerView
@@ -59,22 +61,24 @@ class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
         requireActivity().topAppBarmain.menu.findItem(R.id.selectAllmain).isVisible = false
         requireActivity().topAppBarmain.menu.findItem(R.id.exportfile).isVisible = true
         requireActivity().topAppBarmain.menu.findItem(R.id.recent).isVisible = false
-        requireActivity().topAppBarmain.title = "Contact"
+        requireActivity().topAppBarmain.title = RemoteConfigUtills.getContactTitle()
         requireActivity().topAppBarmain.subtitle = ""
+        requireActivity().topAppBarmain.setBackgroundColor(Color.parseColor(RemoteConfigUtills.getAudioToolBarBackground()))
 
         requireActivity().topAppBarmain.setNavigationIcon(R.drawable.ic_action_menu)
+        val headerView = requireActivity().sidenav.getHeaderView(0)
 
-//        title.setAudioCount(title)
-//        title.audioCountResult.observe(requireActivity(), Observer {
-//            if(it != null){
-//                headerView.audiocount.text = "Audio List Available is $it"
-//            }
-//        })
+        title.setAudioCount(title)
+        title.audioCountResult.observe(requireActivity(), Observer {
+            if(it != null){
+                headerView.audiocount.text = "Audio List Available is $it"
+            }
+        })
 
         sharedPreferences = requireActivity().getSharedPreferences("com.example.contact.user",
             Context.MODE_PRIVATE)
 
-        val view = inflater.inflate(R.layout.contactlistviewfragment,container,false)
+        val view = inflater.inflate(R.layout.fragment_contactlist,container,false)
         listView = view.listview
         createAdapter()
 
@@ -152,20 +156,20 @@ class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
                 requireActivity().topAppBarmain.menu.findItem(R.id.selectAllmain).isVisible = false
             }
         })
-        return view
+         return view
     }
     override fun onResume() {
         super.onResume()
+        contactAdapter.notifyDataSetChanged()
         contactList.clear()
         val headerView = requireActivity().sidenav.getHeaderView(0)
-        signinUser?.let { title.setDbData("GetDB",selectedList, it,title) }
+        signinUser?.let { title.setDbData("GetDB", selectedList, it, title) }
         title.contactList.observe(requireActivity(), Observer {
-            if(it != null){
+            if (it != null) {
                 progressDialog.dismiss()
                 contactList = it
                 headerView.contactcount.text = "Contact Available is ${contactList.size}"
-//                createAdapter(it)
-                signinUser?.let { it1 -> contactAdapter.setData(it,title, it1) }
+                signinUser?.let { it1 -> contactAdapter.setData(it, title, it1) }
             }
         })
     }
@@ -277,12 +281,13 @@ class ContactListViewFragment : Fragment(R.layout.contactlistviewfragment) {
     }
 
     fun createAdapter()  {
-//        contactAdapter = signinUser?.let { ContactAdapter() }!!
+        contactAdapter = ContactAdapter()
         val layoutManager = LinearLayoutManager(requireContext())
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         listView.layoutManager = layoutManager
         listView.adapter = contactAdapter
     }
+
 
 
 }

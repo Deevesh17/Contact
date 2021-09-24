@@ -13,16 +13,16 @@ import androidx.lifecycle.Observer
 import com.example.contact.R
 import com.example.contact.viewmodel.ContactViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.createnewpassword.view.*
+import kotlinx.android.synthetic.main.fragment_createnewpassword.view.*
 
-class CreatePassworFragment : Fragment(R.layout.createnewpassword) {
+class CreatePassworFragment : Fragment(R.layout.fragment_createnewpassword) {
     lateinit var sharedPreferences: SharedPreferences
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.createnewpassword, container, false)
+        val view = inflater.inflate(R.layout.fragment_createnewpassword, container, false)
 
 
 
@@ -40,7 +40,7 @@ class CreatePassworFragment : Fragment(R.layout.createnewpassword) {
 
 //        Back to Login page
         view.backtologinpass.setOnClickListener {
-            parentFragmentManager.beginTransaction().replace(R.id.fragment, SigninActivity()).commit()
+            parentFragmentManager.beginTransaction().replace(R.id.fragment, SigninFragment()).commit()
         }
 
         view.creatpass.setOnClickListener {
@@ -52,7 +52,7 @@ class CreatePassworFragment : Fragment(R.layout.createnewpassword) {
                     if (resultData[0] == "true"){
                         Toast.makeText(context, "Password Successfully changed", Toast.LENGTH_SHORT)
                             .show()
-                        parentFragmentManager.beginTransaction().replace(R.id.fragment, SigninActivity())
+                        parentFragmentManager.beginTransaction().replace(R.id.fragment, SigninFragment())
                             .commit()
                     }else{
                         requireContext().let { it1 ->

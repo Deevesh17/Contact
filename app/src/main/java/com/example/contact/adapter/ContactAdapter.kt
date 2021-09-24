@@ -14,8 +14,9 @@ import com.example.contact.R
 import com.example.contact.activity.ContactDataActivity
 import com.example.contact.model.ContactData
 import com.example.contact.viewmodel.ContactViewModel
-import kotlinx.android.synthetic.main.activity_listdesign.view.*
-class ContactAdapter() : RecyclerView.Adapter<ContactAdapter.ContactViewHolder>(),
+import kotlinx.android.synthetic.main.adapter_contactlist.view.*
+
+class ContactAdapter : RecyclerView.Adapter<ContactAdapter.ContactViewHolder>(),
     Filterable {
     private var SelectedContact = ArrayList<ContactData>()
     var contact : ArrayList<ContactData> = ArrayList()
@@ -38,72 +39,75 @@ class ContactAdapter() : RecyclerView.Adapter<ContactAdapter.ContactViewHolder>(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
         this.parent = parent
         val layoutinflater = LayoutInflater.from(parent.context)
-        val view  = layoutinflater.inflate(R.layout.activity_listdesign,parent,false)
+        val view  = layoutinflater.inflate(R.layout.adapter_contactlist,parent,false)
         return ContactViewHolder(view)
     }
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
-        if(ContactList.size > 0) {
-            holder.name.setText(ContactList[position].name)
-            val numberData = ContactList[position].number?.split(",")
-            holder.number.setText(numberData?.get(0))
-            contactid = ContactList[position].contactId
-            if (ContactList[position].profile != null) {
-                holder.profile.setImageBitmap(ContactList[position].profile)
-            } else {
-                holder.profile.setImageResource(R.drawable.ic_action_person)
-            }
-            if (isSelectAll) {
-                holder.itemView.savetodb.isVisible = true
-                if (!removedPosition.contains(position)) {
-                    selectedPosition.add(position)
-                }
-                onClickAsSelect = true
-            }
-            holder.itemView.savetodb.isVisible = selectedPosition.contains(position)
-            holder.itemView.setOnClickListener {
-                if (selectedPosition.size == 0) {
-                    onClickAsSelect = false
-                }
-                if (onClickAsSelect) {
-                    if (holder.itemView.savetodb.isVisible) {
-                        holder.itemView.savetodb.isVisible = false
-                        selectedPosition.remove(position)
-                        removedPosition.add(position)
-                        selectedCount--
-                        SelectedContact.remove(ContactList[position])
-                        title.setValutodata("Selected(${selectedCount}/${contact.size})")
-
-                    } else {
-                        holder.itemView.savetodb.isVisible = true
-                        selectedPosition.add(position)
-                        SelectedContact.add(ContactList[position])
-                        selectedCount++
-                        title.setValutodata("Selected(${selectedCount}/${contact.size})")
-                    }
+        if(contact.size > 0) {
+            if (ContactList.size > 0) {
+                holder.name.setText(ContactList[position].name)
+                val numberData = ContactList[position].number?.split(",")
+                holder.number.setText(numberData?.get(0))
+                contactid = ContactList[position].contactId
+                if (ContactList[position].profile != null) {
+                    holder.profile.setImageBitmap(ContactList[position].profile)
                 } else {
-                    if (ContactList[position].contactId != -1) {
-                        val intent =
-                            Intent(holder.itemView.context, ContactDataActivity::class.java)
-                        intent.putExtra("contactid", ContactList[position].contactId)
-                        intent.putExtra("email", signinUser)
-                        startActivity(holder.itemView.context, intent, null)
+                    holder.profile.setImageResource(R.drawable.ic_action_person)
+                }
+                if (isSelectAll) {
+                    holder.itemView.savetodb.isVisible = true
+                    if (!removedPosition.contains(position)) {
+                        selectedPosition.add(position)
                     }
+                    onClickAsSelect = true
                 }
-                if (selectedCount == contact.size) {
-                    isSelectAll = true
+                holder.itemView.savetodb.isVisible = selectedPosition.contains(position)
+                holder.itemView.setOnClickListener {
+                    if (selectedPosition.size == 0) {
+                        onClickAsSelect = false
+                    }
+                    if (onClickAsSelect) {
+                        if (holder.itemView.savetodb.isVisible) {
+                            holder.itemView.savetodb.isVisible = false
+                            selectedPosition.remove(position)
+                            removedPosition.add(position)
+                            selectedCount--
+                            SelectedContact.remove(ContactList[position])
+                            title.setValutodata("Selected(${selectedCount}/${contact.size})")
+
+                        } else {
+                            holder.itemView.savetodb.isVisible = true
+                            selectedPosition.add(position)
+                            SelectedContact.add(ContactList[position])
+                            selectedCount++
+                            title.setValutodata("Selected(${selectedCount}/${contact.size})")
+                        }
+                    } else {
+                        if (ContactList[position].contactId != -1) {
+                            val intent =
+                                Intent(holder.itemView.context, ContactDataActivity::class.java)
+                            intent.putExtra("contactid", ContactList[position].contactId)
+                            intent.putExtra("email", signinUser)
+                            startActivity(holder.itemView.context, intent, null)
+                        }
+                    }
+                    if (selectedCount == contact.size) {
+                        isSelectAll = true
+                    }
+//                    throw RuntimeException("I get crashed")
                 }
-            }
-            holder.itemView.setOnLongClickListener {
-                holder.itemView.savetodb.isVisible = true
-                selectedPosition.add(position)
-                onClickAsSelect = true
-                selectedCount++
-                SelectedContact.add(ContactList[position])
-                title.setValutodata("Selected(${selectedCount}/${contact.size})")
-                if (selectedCount == contact.size) {
-                    isSelectAll = true
+                holder.itemView.setOnLongClickListener {
+                    holder.itemView.savetodb.isVisible = true
+                    selectedPosition.add(position)
+                    onClickAsSelect = true
+                    selectedCount++
+                    SelectedContact.add(ContactList[position])
+                    title.setValutodata("Selected(${selectedCount}/${contact.size})")
+                    if (selectedCount == contact.size) {
+                        isSelectAll = true
+                    }
+                    true
                 }
-                true
             }
         }
 

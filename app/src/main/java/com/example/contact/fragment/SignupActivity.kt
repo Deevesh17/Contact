@@ -13,9 +13,9 @@ import androidx.fragment.app.Fragment
 import com.example.contact.R
 import com.example.contact.viewmodel.ContactViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.signup_fragment.view.*
+import kotlinx.android.synthetic.main.fragment_signup.view.*
 
-class SignupActivity: Fragment(R.layout.signup_fragment) {
+class SignupActivity: Fragment(R.layout.fragment_signup) {
     lateinit var sharedPreferences: SharedPreferences
     lateinit var sharedPreferencesEditor : SharedPreferences.Editor
     override fun onCreateView(
@@ -29,7 +29,7 @@ class SignupActivity: Fragment(R.layout.signup_fragment) {
             Context.MODE_PRIVATE)
         sharedPreferencesEditor = sharedPreferences.edit()
 
-        val view = inflater.inflate(R.layout.signup_fragment, container, false)
+        val view = inflater.inflate(R.layout.fragment_signup, container, false)
 
         //animation
         val topAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.topanimation)
@@ -39,7 +39,7 @@ class SignupActivity: Fragment(R.layout.signup_fragment) {
 
         //Loginfragment
         view.loginup.setOnClickListener {
-            val signinFragment = SigninActivity()
+            val signinFragment = SigninFragment()
             parentFragmentManager.beginTransaction().replace(R.id.fragment, signinFragment).commit()
         }
 
@@ -72,7 +72,7 @@ class SignupActivity: Fragment(R.layout.signup_fragment) {
                                             "email",
                                             view.emailsignup.text.toString()
                                         )
-                                        val signinFragment = SigninActivity()
+                                        val signinFragment = SigninFragment()
                                         parentFragmentManager.beginTransaction()
                                             .replace(R.id.fragment, signinFragment).commit()
                                     } else if (resultData[1] == "User Already Exists You can login by clicking Okay") {
@@ -80,7 +80,7 @@ class SignupActivity: Fragment(R.layout.signup_fragment) {
                                             "email",
                                             view.emailsignup.text.toString()
                                         )
-                                        val signinFragment = SigninActivity()
+                                        val signinFragment = SigninFragment()
                                         parentFragmentManager.beginTransaction()
                                             .replace(R.id.fragment, signinFragment).commit()
                                     }

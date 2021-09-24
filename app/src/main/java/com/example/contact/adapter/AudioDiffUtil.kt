@@ -18,9 +18,7 @@ class AudioDiffUtil(val oldList :List<Audio>, val newList : List<Audio>) : DiffU
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return when{
-            oldList[oldItemPosition].audioId != newList[newItemPosition].audioId -> {false}
-            oldList[oldItemPosition].audioFilePath != newList[newItemPosition].audioFilePath -> {false}
-            oldList[oldItemPosition].audioTitle != newList[newItemPosition].audioTitle -> {false}
+            oldList[oldItemPosition] != newList[newItemPosition] -> {false}
             else -> {true}
         }
     }

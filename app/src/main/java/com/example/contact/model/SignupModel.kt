@@ -2,9 +2,15 @@ package com.example.contact.model
 
 import android.content.Context
 import android.database.Cursor
+import android.widget.Toast
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 
-class SignupPasswordModel(val context: Context) {
+class SignupModel(val context: Context) {
 
     var logInDB = LogInDB(context) //Initializinf Database object
     val emailValidationPattern = "^[a-z][a-z0-9.]{5,30}@[a-z]+[.a-z]+\$"
@@ -44,6 +50,20 @@ class SignupPasswordModel(val context: Context) {
         if(checkEmail(email)) {
             if(!(checkMobileNumber(number))) return "Alert!!,Enter valid Mobile Number"
             else if (checkPassword(password, confirmPassword) == "Success") {
+                CoroutineScope(IO).launch {
+                    val db = Firebase.firestore
+                    val userData = hashMapOf(
+                        "UserName" to name,
+                        "Email" to email,
+                        "MobileNumber" to number,
+                        "Password" to password
+                    )
+                    db.collection("user")
+                        .add(userData)
+                        .addOnSuccessListener {
+                            Toast.makeText(context,"Data Added ${it?.id}",Toast.LENGTH_SHORT).show()
+                        }
+                }
                 val cursor: Cursor? = getDataFromDB(email)
                 if (cursor?.count == 0) {
                     logInDB.insertuserdata(name, email, password, number)

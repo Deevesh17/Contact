@@ -11,6 +11,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
 import com.example.contact.R
+import com.example.contact.model.RemoteConfigUtills
 import com.example.contact.viewmodel.ContactViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.navheader.view.*
@@ -23,15 +24,13 @@ import kotlinx.android.synthetic.main.navheader.view.*
      override fun onCreate(savedInstanceState: Bundle?) {
          super.onCreate(savedInstanceState)
          setContentView(R.layout.activity_main)
-
+         RemoteConfigUtills.initializeRemoteConfig()
          sharedPreferences = this.getSharedPreferences(
              "com.example.contact.user",
              Context.MODE_PRIVATE
          )
          val navHostFragment = supportFragmentManager.findFragmentById(R.id.mainfragment) as NavHostFragment
          navControler = navHostFragment.navController
-
-
          appBarConfiguration = AppBarConfiguration(setOf(R.id.navhome,R.id.navaudio,R.id.navsettings),maindrawable)
 
          topAppBarmain.setupWithNavController(navControler,appBarConfiguration)
@@ -69,7 +68,6 @@ import kotlinx.android.synthetic.main.navheader.view.*
                  R.id.navsettings->{
                      navControler.navigate(it.itemId)
                  }
-
              }
              true
          }
@@ -109,7 +107,6 @@ import kotlinx.android.synthetic.main.navheader.view.*
          val navController = navHostFragment.navController
          return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
      }
-
 
 
  }

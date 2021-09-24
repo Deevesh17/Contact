@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,22 +14,24 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.example.contact.R
 import com.example.contact.activity.UserActivity
+import com.example.contact.model.RemoteConfigUtills
 import com.example.contact.viewmodel.ContactViewModel
 import com.example.contact.worker.DeleteContactWorker
 import com.example.contact.worker.GoogleContactSyncWorker
 import com.facebook.AccessToken
-import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.api.services.people.v1.PeopleServiceScopes
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_setting.view.*
 import kotlinx.android.synthetic.main.progreesbar.*
-import kotlinx.android.synthetic.main.settingfragment.view.*
 import java.util.*
 
-class SettingFragment : androidx.fragment.app.Fragment(R.layout.settingfragment) {
+class SettingFragment : androidx.fragment.app.Fragment(R.layout.fragment_setting) {
     lateinit var progressDialog: Dialog
     lateinit var sharedPreferences: SharedPreferences
     lateinit var sharedPreferencesEditor : SharedPreferences.Editor
@@ -51,9 +54,11 @@ class SettingFragment : androidx.fragment.app.Fragment(R.layout.settingfragment)
         requireActivity().topAppBarmain.menu.findItem(R.id.recent).isVisible = false
         requireActivity().topAppBarmain.title = "Setting"
         requireActivity().topAppBarmain.subtitle = ""
+        requireActivity().topAppBarmain.setBackgroundColor(Color.parseColor(RemoteConfigUtills.getAudioToolBarBackground()))
+
         requireActivity().topAppBarmain.setNavigationIcon(R.drawable.ic_action_menu)
 
-        val view = inflater.inflate(R.layout.settingfragment,container,false)
+        val view = inflater.inflate(R.layout.fragment_setting,container,false)
         progressDialog = Dialog(requireContext())
         progressDialog.setContentView(R.layout.progreesbar)
 
@@ -124,7 +129,7 @@ class SettingFragment : androidx.fragment.app.Fragment(R.layout.settingfragment)
                             Timer().schedule(object : TimerTask() {
                                 override fun run() {
                                     progressDialog.dismiss()
-                                    LoginManager.getInstance().logOut()
+                                    Firebase.auth.signOut()
                                     startActivity(intent)
                                     requireActivity().finish()
                                 }

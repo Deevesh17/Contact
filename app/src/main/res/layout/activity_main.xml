@@ -36,9 +36,9 @@
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@+id/actionbar"
             app:defaultNavHost="true"
-            app:navGraph="@navigation/sidebarnav"
-            android:layout_below="@+id/actionbar"  />
+            app:navGraph="@navigation/sidebarnav" />
 
     </RelativeLayout>
 

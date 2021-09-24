@@ -6,7 +6,7 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.contact.R
-import com.example.contact.fragment.SigninActivity
+import com.example.contact.fragment.SigninFragment
 
 class UserActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,7 +14,7 @@ class UserActivity : AppCompatActivity() {
         setContentView(R.layout.activity_user)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        replaceFragment(SigninActivity())
+        replaceFragment(SigninFragment())
     }
     fun replaceFragment(fragment : Fragment){
         val fragmentManager = supportFragmentManager

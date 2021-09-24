@@ -34,19 +34,23 @@ class ContactViewModel(private val ctx : Context) : ViewModel() {
 //    SETDATA FUNCTION OF LOGIN ACTIVITY
     fun setPasswordResult(email : String,Originalpassword : String){
         val loginPasswordModel = LoginPasswordModel(ctx)
-        loginPasswordModel.CreateAccount(email)
+        loginPasswordModel.CreateGoogleAccount(email)
         val result = loginPasswordModel.checkLoginPassword(email,Originalpassword)
         passwordResult.value = result
     }
-    fun setCreateAccount(email : String){
+    fun setCreateGoogleAccount(email : String){
         val loginPasswordModel = LoginPasswordModel(ctx)
-        loginPasswordModel.CreateAccount(email)
+        loginPasswordModel.CreateGoogleAccount(email)
+    }
+    fun setCreateFacebookAccount(email : String){
+        val loginPasswordModel = LoginPasswordModel(ctx)
+        loginPasswordModel.CreateFacebookAccount(email)
     }
 
 
     //    SETDATA FUNCTION OF SIGNUP ACTIVITY
     fun setSignupData(name :String, email : String, number : String, password : String, confirmPassword : String ){
-        val signupPasswordModel = SignupPasswordModel(ctx)
+        val signupPasswordModel = SignupModel(ctx)
         val result = signupPasswordModel.checkSignupPasswordAndWriteDB(name,email, number, password, confirmPassword)
         passwordResult.value = result
     }

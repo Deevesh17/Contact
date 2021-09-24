@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.additional_field.view.*
 import kotlinx.android.synthetic.main.chooseimage.*
 import kotlinx.android.synthetic.main.fieldtext.*
 import kotlinx.android.synthetic.main.fieldtext.view.*
-import kotlinx.android.synthetic.main.signup_fragment.view.*
+import kotlinx.android.synthetic.main.fragment_signup.view.*
 import java.io.ByteArrayOutputStream
 import java.util.regex.Pattern
 

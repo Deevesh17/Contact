@@ -131,7 +131,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="horizontal">
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/google"
                 android:layout_width="65dp"
@@ -139,12 +139,16 @@
                 android:src="@drawable/google"
                 android:layout_margin="10dp"
                 app:shapeAppearanceOverlay="@style/circle" />
-                <com.facebook.login.widget.LoginButton
+
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/facebook"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                     />
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:src="@drawable/facebook"
+                    android:layout_margin="10dp"
+                    app:shapeAppearanceOverlay="@style/circle" />
+
+
             </LinearLayout>
 
         </LinearLayout>
